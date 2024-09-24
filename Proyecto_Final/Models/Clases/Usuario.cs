@@ -1,16 +1,20 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Proyecto_Final.Models.Clases;
 
 public partial class Usuario
 {
+    
     public int IdUsuarios { get; set; }
 
     public string NombreUsuario { get; set; } = null!;
 
     public string Email { get; set; } = null!;
 
+    [Display (Name = "contraseña")]
     public string Contraseña { get; set; } = null!;
 
     public int Miembro { get; set; }
