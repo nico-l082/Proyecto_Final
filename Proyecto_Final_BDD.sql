@@ -5,7 +5,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[biblioteca](
+CREATE TABLE [dbo].[Biblioteca](
 	[idBiblio] [int] IDENTITY(1,1) NOT NULL,
 	[nombre] [varchar](50) NOT NULL,
 	[juegos] [int] NOT NULL,
@@ -20,7 +20,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[juegos](
+CREATE TABLE [dbo].[Juegos](
 	[idJuegos] [int] IDENTITY(1,1) NOT NULL,
 	[nombre] [varchar](100) NOT NULL,
 	[descripcion] [varchar](100) NOT NULL,
@@ -55,7 +55,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[miembrosPlus](
+CREATE TABLE [dbo].[MiembrosPlus](
 	[idMiembros] [int] IDENTITY(1,1) NOT NULL,
 	[tipo] [int] NOT NULL,
 	[precioMembresia] [money] NOT NULL,
@@ -73,7 +73,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[tipoMembresia](
+CREATE TABLE [dbo].[TipoMembresia](
 	[idTipoMembresia] [int] IDENTITY(1,1) NOT NULL,
 	[tipo] [int] NOT NULL,
 PRIMARY KEY CLUSTERED 
@@ -87,7 +87,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[usuarios](
+CREATE TABLE [dbo].[Usuarios](
 	[idUsuarios] [int] IDENTITY(1,1) NOT NULL,
 	[nombreUsuario] [varchar](100) NOT NULL,
 	[email] [varchar](50) NOT NULL,
@@ -101,33 +101,33 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-ALTER TABLE [dbo].[biblioteca]  WITH CHECK ADD  CONSTRAINT [biblio_Juego_fk] FOREIGN KEY([juegos])
-REFERENCES [dbo].[juegos] ([idJuegos])
+ALTER TABLE [dbo].[Biblioteca]  WITH CHECK ADD  CONSTRAINT [biblio_Juego_fk] FOREIGN KEY([juegos])
+REFERENCES [dbo].[Juegos] ([idJuegos])
 GO
-ALTER TABLE [dbo].[biblioteca] CHECK CONSTRAINT [biblio_Juego_fk]
+ALTER TABLE [dbo].[Biblioteca] CHECK CONSTRAINT [biblio_Juego_fk]
 GO
-ALTER TABLE [dbo].[juegos]  WITH CHECK ADD  CONSTRAINT [Juegos_TipoMemb_FK] FOREIGN KEY([itiPlus])
-REFERENCES [dbo].[tipoMembresia] ([idTipoMembresia])
+ALTER TABLE [dbo].[Juegos]  WITH CHECK ADD  CONSTRAINT [Juegos_TipoMemb_FK] FOREIGN KEY([itiPlus])
+REFERENCES [dbo].[TipoMembresia] ([idTipoMembresia])
 GO
-ALTER TABLE [dbo].[juegos] CHECK CONSTRAINT [Juegos_TipoMemb_FK]
+ALTER TABLE [dbo].[Juegos] CHECK CONSTRAINT [Juegos_TipoMemb_FK]
 GO
-ALTER TABLE [dbo].[miembrosPlus]  WITH CHECK ADD  CONSTRAINT [Plus_TipoMemb_FK] FOREIGN KEY([tipo])
-REFERENCES [dbo].[tipoMembresia] ([idTipoMembresia])
+ALTER TABLE [dbo].[MiembrosPlus]  WITH CHECK ADD  CONSTRAINT [Plus_TipoMemb_FK] FOREIGN KEY([tipo])
+REFERENCES [dbo].[TipoMembresia] ([idTipoMembresia])
 GO
-ALTER TABLE [dbo].[miembrosPlus] CHECK CONSTRAINT [Plus_TipoMemb_FK]
+ALTER TABLE [dbo].[MiembrosPlus] CHECK CONSTRAINT [Plus_TipoMemb_FK]
 GO
-ALTER TABLE [dbo].[tipoMembresia]  WITH CHECK ADD  CONSTRAINT [Tipo_Memb_FK] FOREIGN KEY([tipo])
+ALTER TABLE [dbo].[TipoMembresia]  WITH CHECK ADD  CONSTRAINT [Tipo_Memb_FK] FOREIGN KEY([tipo])
 REFERENCES [dbo].[Membresia] ([idMembresia])
 GO
-ALTER TABLE [dbo].[tipoMembresia] CHECK CONSTRAINT [Tipo_Memb_FK]
+ALTER TABLE [dbo].[TipoMembresia] CHECK CONSTRAINT [Tipo_Memb_FK]
 GO
-ALTER TABLE [dbo].[usuarios]  WITH CHECK ADD  CONSTRAINT [usu_biblio_fk] FOREIGN KEY([biblioJuegos])
-REFERENCES [dbo].[biblioteca] ([idBiblio])
+ALTER TABLE [dbo].[Usuarios]  WITH CHECK ADD  CONSTRAINT [usu_biblio_fk] FOREIGN KEY([biblioJuegos])
+REFERENCES [dbo].[Biblioteca] ([idBiblio])
 GO
-ALTER TABLE [dbo].[usuarios] CHECK CONSTRAINT [usu_biblio_fk]
+ALTER TABLE [dbo].[Usuarios] CHECK CONSTRAINT [usu_biblio_fk]
 GO
-ALTER TABLE [dbo].[usuarios]  WITH CHECK ADD  CONSTRAINT [Usu_Memb_fk] FOREIGN KEY([miembro])
-REFERENCES [dbo].[miembrosPlus] ([idMiembros])
+ALTER TABLE [dbo].[Usuarios]  WITH CHECK ADD  CONSTRAINT [Usu_Memb_fk] FOREIGN KEY([miembro])
+REFERENCES [dbo].[MiembrosPlus] ([idMiembros])
 GO
-ALTER TABLE [dbo].[usuarios] CHECK CONSTRAINT [Usu_Memb_fk]
+ALTER TABLE [dbo].[Usuarios] CHECK CONSTRAINT [Usu_Memb_fk]
 GO
