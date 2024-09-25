@@ -22,6 +22,32 @@ namespace Proyecto_Final.Controllers
             return View();
         }
 
+        [HttpGet]
+        public ActionResult LogIn()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult LogIn(Usuario usuario)
+        {
+            var checkLogin = db.Usuarios.Where(x => x.Email.Equals(usuario.Email)
+            && x.Contraseña.Equals(usuario.Contraseña))
+                .FirstOrDefault();
+
+            if (checkLogin != null)
+            {
+                HttpContext.Session.SetString("email", usuario.Email.ToString());
+                HttpContext.Session.SetString("clave", usuario.Contraseña.ToString());
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                ViewBag.Notification = "Email o clave incorrectas";
+            }
+            return View();
+        }
         public IActionResult SignUp()
         {
             return View();
@@ -32,6 +58,7 @@ namespace Proyecto_Final.Controllers
         {
             if(db.Usuarios.Any(x => x.Email == usuario.Email))
             {
+                
                 ViewBag.Notification = "Esta cuenta ya existe";
                 return View();
             }else

@@ -10,11 +10,14 @@ public partial class Usuario
     
     public int IdUsuarios { get; set; }
 
+    [Display (Name = "Nombre de usuario")]
+    [Required]
     public string NombreUsuario { get; set; } = null!;
-
+    [Required]
     public string Email { get; set; } = null!;
 
     [Display (Name = "contraseña")]
+    [Required]
     public string Contraseña { get; set; } = null!;
 
     public int Miembro { get; set; }
