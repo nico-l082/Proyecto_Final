@@ -19,25 +19,37 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="navbar-collapse navbar-collapse d-sm-inline-flex border-1">
+                    <ul class="navbar-nav flex-grow-1 fs-4">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Nosotros</a>
+                            <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="Privacy">Nosotros</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="Privacy">Mis Juegos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="Privacy">Soporte</a>
                         </li>
                     </ul>
                 </div>
-                <div class ="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1 flex-end">
-                        <li>
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="LogIn">LogIn</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="SignUp">SignUp</a>
-                        </li>
-                    </ul>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-end">
+                    <div class="LogIn-Shadow">
+                        <ul class="navbar-nav flex-grow-1  fs-4 m-3">
+                            <li>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="LogIn">LogIn</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="SignUp-Shadow">
+                        <ul class="navbar-nav flex-grow-1  fs-2">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="SignUp">SignUp</a>
+                            </li>
+                        </ul>
+                    </div>                        
                 </div>
             </div>
         </nav>
