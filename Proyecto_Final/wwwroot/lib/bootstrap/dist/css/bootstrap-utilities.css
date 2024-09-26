@@ -1265,6 +1265,10 @@
   text-decoration: line-through !important;
 }
 
+.box-transform:hover {
+    transform: scale(2,2);
+}
+
 .text-lowercase {
   text-transform: lowercase !important;
 }
