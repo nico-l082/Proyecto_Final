@@ -60,7 +60,6 @@ button.accept-policy {
     border-radius: 20%;
     transition: box-shadow 0.3s ease;
 }
-
 .SignUp-Shadow:hover {
 
     -webkit-box-shadow: 0px 0px 28px -1px rgba(0,0,0,0.52);
