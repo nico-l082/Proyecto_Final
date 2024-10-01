@@ -15,12 +15,18 @@ a {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
+
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+.navbar > .container, .navbar > .container-fluid, .navbar > .container-lg, .navbar > .container-md, .navbar > .container-sm, .navbar > .container-xl, .navbar > .container-xxl {
+    background-color: #f3fb8a;
+    margin: -10px;
+    margin-left: 0px
+}
+
+
+.flex-end {
+    justify-content: flex-end;
 }
 
 .border-top {
@@ -45,4 +51,18 @@ button.accept-policy {
   width: 100%;
   white-space: nowrap;
   line-height: 60px;
+  background-color : lightgreen;
+}
+
+.SignUp-Shadow {
+    font-size: 20px;
+    background-color: #d8b207;
+    border-radius: 20%;
+    transition: box-shadow 0.3s ease;
+}
+.SignUp-Shadow:hover {
+
+    -webkit-box-shadow: 0px 0px 28px -1px rgba(0,0,0,0.52);
+    -moz-box-shadow: 0px 0px 28px -1px rgba(0,0,0,0.52);
+    box-shadow: 0px 0px 28px -1px rgba(0,0,0,0.52);
 }

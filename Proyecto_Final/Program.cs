@@ -25,7 +25,3 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
-
-//lautaro
-//lautaro2
-//lautaro3

@@ -1650,6 +1650,10 @@
     flex-wrap: wrap-reverse !important;
   }
 
+  .grid-template-column {
+      grid-template-columns: repeat(3, 1fr) !important;
+  }
+
   .gap-sm-0 {
     gap: 0 !important;
   }
