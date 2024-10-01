@@ -17,6 +17,7 @@ public partial class Usuario
     public string Email { get; set; } = null!;
 
     [Display (Name = "contraseña")]
+
     [Required]
     public string Contraseña { get; set; } = null!;
 

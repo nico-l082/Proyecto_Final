@@ -22,6 +22,14 @@ namespace Proyecto_Final.Controllers
             return View();
         }
 
+        public IActionResult Nosotros()
+        {
+            return View();
+        }
+        public IActionResult MisJuegos()
+        {
+            return View();
+        }
         [HttpGet]
         public ActionResult LogIn()
         {
