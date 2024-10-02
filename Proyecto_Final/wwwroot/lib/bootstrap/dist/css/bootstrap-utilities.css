@@ -1654,6 +1654,10 @@
       grid-template-columns: repeat(3, 1fr) !important;
   }
 
+    .grid-template-column_01 {
+        grid-template-columns: repeat(1, 1fr) !important;
+    }
+
   .gap-sm-0 {
     gap: 0 !important;
   }

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Proyecto_Final.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="c:\users\nicol\source\repos\nico-l082\proyecto_final\proyecto_final\views\estilos\estilos.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/Estilos.css" asp-append-version="true" />
 </head>
 <body>
     <header>
@@ -26,10 +26,10 @@
                             <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="Nosotros">Nosotros</a>
+                            <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="Privacy">Nosotros</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="MisJuegos">Mis Juegos</a>
+                            <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="Privacy">Mis Juegos</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="Privacy">Soporte</a>
@@ -45,7 +45,9 @@
                         </ul>
                     </div>
                     <div class="SignUp-Shadow">
-                        <ul class="navbar-nav flex-grow-1  fs-4">
+                        <ul class="navbar-nav flex-grow-1  fs-4
+
+">
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="SignUp">SignUp</a>
                             </li>
@@ -61,7 +63,7 @@
         </main>
     </div>
 
-    <footer class="d-lg-flex border-top footer text-muted">
+    <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2024 - Proyecto_Final - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>

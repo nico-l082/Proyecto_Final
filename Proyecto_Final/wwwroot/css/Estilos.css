@@ -1,0 +1,30 @@
+﻿body {
+}
+
+.container_01 {
+    display: inline-block;
+    height: auto;
+    width: 40%;
+}
+
+.separacion {
+    padding-top: 10% !important;
+    transform: scale(1.4);
+}
+
+.label_01 {
+    display: flex;
+    justify-content: flex-start;
+}
+
+#centrado {
+    text-align: center !important;
+}
+
+#hola {
+    transition: transform 0.3s;
+}
+
+#hola:hover {
+    transform: scale(1.1) !important;
+}
