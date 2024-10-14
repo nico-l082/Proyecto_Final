@@ -22,37 +22,63 @@
                 </button>
                 <div class="navbar-collapse navbar-collapse d-sm-inline-flex border-1">
                     <ul class="navbar-nav flex-grow-1 fs-5">
-                        <li class="nav-item">
+                        <li class="nav-item" id="hola">
                             <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" id="hola">
                             <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="Privacy">Nosotros</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="Privacy">Mis Juegos</a>
-                        </li>
-                        <li class="nav-item">
+                        </li>                 
+                        <li class="nav-item" id="hola">
                             <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="Privacy">Soporte</a>
+                        </li>
+                        <li class="nav-item" id="hola">
+                            <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="Privacy">Mis Juegos</a>
                         </li>
                     </ul>
                 </div>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-end">
                     <div class="LogIn-Shadow">
                         <ul class="navbar-nav flex-grow-1  fs-5 m-3">
-                            <li>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="LogIn">LogIn</a>
+                            <li id="Bienvenido">
+                                <div>
+                                    @if (Context.Session.GetString("nombreUsuario") != null)
+                                    {
+                                        <p>Bienvenido, @Context.Session.GetString("nombreUsuario")!</p>
+                                    }
+                                    else
+                                    {
+                                        <p>No has iniciado sesión</p>
+                                    }
+                                </div>
                             </li>
                         </ul>
                     </div>
-                    <div class="SignUp-Shadow">
-                        <ul class="navbar-nav flex-grow-1  fs-4
+                    @if (Context.Session.GetString("nombreUsuario") == null)
+                    {
+                        <div class="LogIn-Shadow">
+                            <ul class="navbar-nav flex-grow-1 fs-5 m-3">
+                                <li id="hola" style="padding-top:5%;">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="LogIn">LogIn</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="SignUp-Shadow">
+                            <ul class="navbar-nav flex-grow-1 fs-4">
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="SignUp">SignUp</a>
+                                </li>
+                            </ul>
+                        </div>
+                    }
+                    else
+                    {
+                        <div>
+                            <ul class="navbar-nav flex-grow-1 fs-5 m-3">
+                            <li><a class="nav-link text-dark" href="@Url.Action("LogOut", "Home")">Logout</a></li>
+                            </ul>
+                        </div>                        
+                    }
 
-">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="SignUp">SignUp</a>
-                            </li>
-                        </ul>
-                    </div>                        
                 </div>
             </div>
         </nav>

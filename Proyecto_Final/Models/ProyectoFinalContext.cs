@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Proyecto_Final.Models.Clases;
 
 namespace Proyecto_Final.Models;
 
@@ -35,9 +34,9 @@ public partial class ProyectoFinalContext : DbContext
     {
         modelBuilder.Entity<Biblioteca>(entity =>
         {
-            entity.HasKey(e => e.IdBiblio).HasName("PK__bibliote__C721831FA8EBE5F1");
+            entity.HasKey(e => e.IdBiblio).HasName("PK__Bibliote__C721831F871764D8");
 
-            entity.ToTable("biblioteca");
+            entity.ToTable("Biblioteca");
 
             entity.Property(e => e.IdBiblio).HasColumnName("idBiblio");
             entity.Property(e => e.Juegos).HasColumnName("juegos");
@@ -48,15 +47,12 @@ public partial class ProyectoFinalContext : DbContext
 
             entity.HasOne(d => d.JuegosNavigation).WithMany(p => p.Bibliotecas)
                 .HasForeignKey(d => d.Juegos)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("biblio_Juego_fk");
         });
 
         modelBuilder.Entity<Juego>(entity =>
         {
-            entity.HasKey(e => e.IdJuegos).HasName("PK__juegos__E4EEF679FDED8139");
-
-            entity.ToTable("juegos");
+            entity.HasKey(e => e.IdJuegos).HasName("PK__Juegos__E4EEF679CB006B0B");
 
             entity.Property(e => e.IdJuegos).HasColumnName("idJuegos");
             entity.Property(e => e.Desarrolladora)
@@ -82,13 +78,12 @@ public partial class ProyectoFinalContext : DbContext
 
             entity.HasOne(d => d.ItiPlusNavigation).WithMany(p => p.Juegos)
                 .HasForeignKey(d => d.ItiPlus)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("Juegos_TipoMemb_FK");
         });
 
         modelBuilder.Entity<Membresium>(entity =>
         {
-            entity.HasKey(e => e.IdMembresia).HasName("PK__Membresi__BDDB80E942D4D354");
+            entity.HasKey(e => e.IdMembresia).HasName("PK__Membresi__BDDB80E94CDE81D8");
 
             entity.Property(e => e.IdMembresia).HasColumnName("idMembresia");
             entity.Property(e => e.Detalle)
@@ -104,9 +99,7 @@ public partial class ProyectoFinalContext : DbContext
 
         modelBuilder.Entity<MiembrosPlu>(entity =>
         {
-            entity.HasKey(e => e.IdMiembros).HasName("PK__miembros__F1261B7C8B711838");
-
-            entity.ToTable("miembrosPlus");
+            entity.HasKey(e => e.IdMiembros).HasName("PK__Miembros__F1261B7C5B75030D");
 
             entity.Property(e => e.IdMiembros).HasColumnName("idMiembros");
             entity.Property(e => e.CantidadJuegosMembresia).HasColumnName("cantidadJuegosMembresia");
@@ -124,30 +117,24 @@ public partial class ProyectoFinalContext : DbContext
 
             entity.HasOne(d => d.TipoNavigation).WithMany(p => p.MiembrosPlus)
                 .HasForeignKey(d => d.Tipo)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("Plus_TipoMemb_FK");
         });
 
         modelBuilder.Entity<TipoMembresium>(entity =>
         {
-            entity.HasKey(e => e.IdTipoMembresia).HasName("PK__tipoMemb__1D164B22C1C36CE9");
-
-            entity.ToTable("tipoMembresia");
+            entity.HasKey(e => e.IdTipoMembresia).HasName("PK__TipoMemb__1D164B22339793F0");
 
             entity.Property(e => e.IdTipoMembresia).HasColumnName("idTipoMembresia");
             entity.Property(e => e.Tipo).HasColumnName("tipo");
 
             entity.HasOne(d => d.TipoNavigation).WithMany(p => p.TipoMembresiaNavigation)
                 .HasForeignKey(d => d.Tipo)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("Tipo_Memb_FK");
         });
 
         modelBuilder.Entity<Usuario>(entity =>
         {
-            entity.HasKey(e => e.IdUsuarios).HasName("PK__usuarios__3940559ABCC4DF71");
-
-            entity.ToTable("usuarios");
+            entity.HasKey(e => e.IdUsuarios).HasName("PK__Usuarios__3940559A03D1B9BB");
 
             entity.Property(e => e.IdUsuarios).HasColumnName("idUsuarios");
             entity.Property(e => e.BiblioJuegos).HasColumnName("biblioJuegos");
@@ -168,12 +155,10 @@ public partial class ProyectoFinalContext : DbContext
 
             entity.HasOne(d => d.BiblioJuegosNavigation).WithMany(p => p.Usuarios)
                 .HasForeignKey(d => d.BiblioJuegos)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("usu_biblio_fk");
 
             entity.HasOne(d => d.MiembroNavigation).WithMany(p => p.Usuarios)
                 .HasForeignKey(d => d.Miembro)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("Usu_Memb_fk");
         });
 

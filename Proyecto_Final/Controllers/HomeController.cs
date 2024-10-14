@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using Proyecto_Final.Models;
 using Proyecto_Final.Models.Clases;
 using System.ComponentModel.DataAnnotations;
@@ -38,23 +39,40 @@ namespace Proyecto_Final.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult LogIn(Usuario usuario)
+        public ActionResult LogIn(Models.Usuario usuario)
         {
-            var checkLogin = db.Usuarios.Where(x => x.Email.Equals(usuario.Email)
-            && x.Contraseña.Equals(usuario.Contraseña))
-                .FirstOrDefault();
+            // Verificar que el objeto usuario no sea null
+            if (usuario == null || string.IsNullOrEmpty(usuario.Email) || string.IsNullOrEmpty(usuario.Contraseña))
+            {
+                ViewBag.Notification = "Por favor, ingrese un email y una contraseña válidos.";
+                return View();
+            }
+
+            // Buscar el usuario en la base de datos
+            var checkLogin = db.Usuarios
+                .FirstOrDefault(x => x.Email.Equals(usuario.Email) && x.Contraseña.Equals(usuario.Contraseña));
 
             if (checkLogin != null)
             {
-                HttpContext.Session.SetString("email", usuario.Email.ToString());
-                HttpContext.Session.SetString("clave", usuario.Contraseña.ToString());
-                return RedirectToAction("Index", "Home");
+                // Almacenar los datos del usuario en la sesión
+                HttpContext.Session.SetString("email", checkLogin.Email); // Usar checkLogin para obtener el email
+                HttpContext.Session.SetString("clave", checkLogin.Contraseña); // Si realmente necesitas almacenar la contraseña
+                HttpContext.Session.SetString("nombreUsuario", checkLogin.NombreUsuario);
+
+                return RedirectToAction("Index", "Home"); // Redirigir a la página de inicio
             }
             else
             {
                 ViewBag.Notification = "Email o clave incorrectas";
             }
+
             return View();
+        }
+
+        public ActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index", "Home");
         }
         public IActionResult SignUp()
         {
@@ -62,22 +80,25 @@ namespace Proyecto_Final.Controllers
         }
 
         [HttpPost]
-        public IActionResult SignUp(Usuario usuario)
+        public IActionResult SignUp(Models.Usuario usuario)
         {
-            if(db.Usuarios.Any(x => x.Email == usuario.Email))
+            // Verificar si el email ya está registrado en la base de datos
+            if (db.Usuarios.Any(x => x.Email == usuario.Email))
             {
-                
+                // Si el email ya existe, se muestra un mensaje de notificación
                 ViewBag.Notification = "Esta cuenta ya existe";
-                return View();
-            }else
+                return View(usuario); // Devolver el objeto usuario para mantener los valores ingresados
+            }
+            else
             {
                 db.Usuarios.Add(usuario);
                 db.SaveChanges();
 
-                HttpContext.Session.SetString("email", usuario.Email.ToString());
-                HttpContext.Session.SetString("contraseña", usuario.Contraseña.ToString());
-                HttpContext.Session.SetString("nombreUsuario", usuario.NombreUsuario.ToString());
+                HttpContext.Session.SetString("email", usuario.Email);
+                HttpContext.Session.SetString("contraseña", usuario.Contraseña); 
+                HttpContext.Session.SetString("nombreUsuario", usuario.NombreUsuario);
 
+                // Redirigir al Index del HomeController
                 return RedirectToAction("Index", "Home");
             }
         }
@@ -91,6 +112,12 @@ namespace Proyecto_Final.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+
+        public IActionResult Cs2()
+        {
+            return View("Pestaña_Venta/cs2");
         }
     }
 }
