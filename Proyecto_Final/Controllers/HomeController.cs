@@ -50,13 +50,13 @@ namespace Proyecto_Final.Controllers
 
             // Buscar el usuario en la base de datos
             var checkLogin = db.Usuarios
-                .FirstOrDefault(x => x.Email.Equals(usuario.Email) && x.Contraseña.Equals(usuario.Contraseña));
+                .FirstOrDefault(x => usuario.Email.Equals(usuario.Email) && usuario.Contraseña.Equals(usuario.Contraseña));
 
             if (checkLogin != null)
             {
                 // Almacenar los datos del usuario en la sesión
-                HttpContext.Session.SetString("email", checkLogin.Email); // Usar checkLogin para obtener el email
-                HttpContext.Session.SetString("clave", checkLogin.Contraseña); // Si realmente necesitas almacenar la contraseña
+                HttpContext.Session.SetString("email", checkLogin.Email); 
+                HttpContext.Session.SetString("clave", checkLogin.Contraseña); // 
                 HttpContext.Session.SetString("nombreUsuario", checkLogin.NombreUsuario);
 
                 return RedirectToAction("Index", "Home"); // Redirigir a la página de inicio
@@ -118,6 +118,10 @@ namespace Proyecto_Final.Controllers
         public IActionResult Cs2()
         {
             return View("Pestaña_Venta/cs2");
+        }
+        public IActionResult BuyNow()
+        {
+            return View("Pestaña_Venta/BuyNow");
         }
     }
 }
