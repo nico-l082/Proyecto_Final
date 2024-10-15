@@ -5,9 +5,14 @@ using Proyecto_Final.Models.Clases;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Security.Cryptography.Xml;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
 
 namespace Proyecto_Final.Controllers
 {
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -17,12 +22,10 @@ namespace Proyecto_Final.Controllers
         {
             _logger = logger;
         }
-
         public IActionResult Index()
         {
             return View();
         }
-
         public IActionResult Nosotros()
         {
             return View();
@@ -41,25 +44,24 @@ namespace Proyecto_Final.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogIn(Models.Usuario usuario)
         {
-            // Verificar que el objeto usuario no sea null
             if (usuario == null || string.IsNullOrEmpty(usuario.Email) || string.IsNullOrEmpty(usuario.Contraseña))
             {
                 ViewBag.Notification = "Por favor, ingrese un email y una contraseña válidos.";
                 return View();
             }
 
-            // Buscar el usuario en la base de datos
+            
             var checkLogin = db.Usuarios
-                .FirstOrDefault(x => usuario.Email.Equals(usuario.Email) && usuario.Contraseña.Equals(usuario.Contraseña));
+                .FirstOrDefault(x => x.Email.Equals(usuario.Email) && x.Contraseña.Equals(usuario.Contraseña));
 
             if (checkLogin != null)
             {
-                // Almacenar los datos del usuario en la sesión
-                HttpContext.Session.SetString("email", checkLogin.Email); 
-                HttpContext.Session.SetString("clave", checkLogin.Contraseña); // 
+                
+                HttpContext.Session.SetString("email", checkLogin.Email);
+                HttpContext.Session.SetString("clave", checkLogin.Contraseña);
                 HttpContext.Session.SetString("nombreUsuario", checkLogin.NombreUsuario);
 
-                return RedirectToAction("Index", "Home"); // Redirigir a la página de inicio
+                return RedirectToAction("Index", "Home");
             }
             else
             {
@@ -82,23 +84,24 @@ namespace Proyecto_Final.Controllers
         [HttpPost]
         public IActionResult SignUp(Models.Usuario usuario)
         {
-            // Verificar si el email ya está registrado en la base de datos
             if (db.Usuarios.Any(x => x.Email == usuario.Email))
             {
-                // Si el email ya existe, se muestra un mensaje de notificación
+                
                 ViewBag.Notification = "Esta cuenta ya existe";
-                return View(usuario); // Devolver el objeto usuario para mantener los valores ingresados
+                return View();
             }
             else
             {
+                
                 db.Usuarios.Add(usuario);
                 db.SaveChanges();
 
+                
                 HttpContext.Session.SetString("email", usuario.Email);
-                HttpContext.Session.SetString("contraseña", usuario.Contraseña); 
+                HttpContext.Session.SetString("contraseña", usuario.Contraseña);
                 HttpContext.Session.SetString("nombreUsuario", usuario.NombreUsuario);
 
-                // Redirigir al Index del HomeController
+                
                 return RedirectToAction("Index", "Home");
             }
         }
