@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Carrito";
+}
+
+
+<body>
+    <h1>Complete los datos para continuar con la compra.</h1>
+    <hr />
+    <form asp-action="#">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label class="control-label">Nombre</label>
+            <input type="text" class="form-control" />
+            <span class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Apellido</label>
+            <input type="text" class="form-control" />
+            <span class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">DNI</label>
+            <input type="text" class="form-control" />
+            <span class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Num. Tarjeta</label>
+            <input type="text" class="form-control" />
+            <span class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Vencimiento</label>
+            <input type="text" class="form-control" />
+            <span class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Codigo</label>
+            <input type="text" class="form-control" />
+            <span class="text-danger"></span>
+        </div>
+    </form>
+</body>

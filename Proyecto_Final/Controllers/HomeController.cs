@@ -1,12 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using Proyecto_Final.Models;
 using Proyecto_Final.Models.Clases;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Security.Cryptography.Xml;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
 
 namespace Proyecto_Final.Controllers
 {
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -16,12 +22,10 @@ namespace Proyecto_Final.Controllers
         {
             _logger = logger;
         }
-
         public IActionResult Index()
         {
             return View();
         }
-
         public IActionResult Nosotros()
         {
             return View();
@@ -38,23 +42,39 @@ namespace Proyecto_Final.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult LogIn(Usuario usuario)
+        public ActionResult LogIn(Models.Usuario usuario)
         {
-            var checkLogin = db.Usuarios.Where(x => x.Email.Equals(usuario.Email)
-            && x.Contraseña.Equals(usuario.Contraseña))
-                .FirstOrDefault();
+            if (usuario == null || string.IsNullOrEmpty(usuario.Email) || string.IsNullOrEmpty(usuario.Contraseña))
+            {
+                ViewBag.Notification = "Por favor, ingrese un email y una contraseña válidos.";
+                return View();
+            }
+
+            
+            var checkLogin = db.Usuarios
+                .FirstOrDefault(x => x.Email.Equals(usuario.Email) && x.Contraseña.Equals(usuario.Contraseña));
 
             if (checkLogin != null)
             {
-                HttpContext.Session.SetString("email", usuario.Email.ToString());
-                HttpContext.Session.SetString("clave", usuario.Contraseña.ToString());
+                
+                HttpContext.Session.SetString("email", checkLogin.Email);
+                HttpContext.Session.SetString("clave", checkLogin.Contraseña);
+                HttpContext.Session.SetString("nombreUsuario", checkLogin.NombreUsuario);
+
                 return RedirectToAction("Index", "Home");
             }
             else
             {
                 ViewBag.Notification = "Email o clave incorrectas";
             }
+
             return View();
+        }
+
+        public ActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index", "Home");
         }
         public IActionResult SignUp()
         {
@@ -62,22 +82,26 @@ namespace Proyecto_Final.Controllers
         }
 
         [HttpPost]
-        public IActionResult SignUp(Usuario usuario)
+        public IActionResult SignUp(Models.Usuario usuario)
         {
-            if(db.Usuarios.Any(x => x.Email == usuario.Email))
+            if (db.Usuarios.Any(x => x.Email == usuario.Email))
             {
                 
                 ViewBag.Notification = "Esta cuenta ya existe";
                 return View();
-            }else
+            }
+            else
             {
+                
                 db.Usuarios.Add(usuario);
                 db.SaveChanges();
 
-                HttpContext.Session.SetString("email", usuario.Email.ToString());
-                HttpContext.Session.SetString("contraseña", usuario.Contraseña.ToString());
-                HttpContext.Session.SetString("nombreUsuario", usuario.NombreUsuario.ToString());
+                
+                HttpContext.Session.SetString("email", usuario.Email);
+                HttpContext.Session.SetString("contraseña", usuario.Contraseña);
+                HttpContext.Session.SetString("nombreUsuario", usuario.NombreUsuario);
 
+                
                 return RedirectToAction("Index", "Home");
             }
         }
@@ -91,6 +115,16 @@ namespace Proyecto_Final.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+
+        public IActionResult Cs2()
+        {
+            return View("Pestaña_Venta/cs2");
+        }
+        public IActionResult BuyNow()
+        {
+            return View("Pestaña_Venta/BuyNow");
         }
     }
 }
