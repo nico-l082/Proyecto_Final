@@ -11,13 +11,13 @@ public partial class MiembrosPlu
 
     public decimal? PrecioMembresia { get; set; }
 
-    public string? FormaPago { get; set; }
+    public string FormaPago { get; set; }
 
     public int? CantidadJuegosMembresia { get; set; }
 
     public DateTime? Vigencia { get; set; }
 
-    public virtual TipoMembresium? TipoNavigation { get; set; }
+    public virtual TipoMembresium TipoNavigation { get; set; }
 
     public virtual ICollection<Usuario> Usuarios { get; set; } = new List<Usuario>();
 }

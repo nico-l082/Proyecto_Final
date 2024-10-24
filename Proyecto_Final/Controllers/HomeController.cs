@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Proyecto_Final.Controllers
 {
@@ -39,6 +40,10 @@ namespace Proyecto_Final.Controllers
         {
             return View();
         }
+        public ActionResult Admin()
+        {
+            return View();
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -50,26 +55,39 @@ namespace Proyecto_Final.Controllers
                 return View();
             }
 
-            
-            var checkLogin = db.Usuarios
+            // Verificar si es un administrador
+            var checkAdmin = db.Admins
                 .FirstOrDefault(x => x.Email.Equals(usuario.Email) && x.Contraseña.Equals(usuario.Contraseña));
 
-            if (checkLogin != null)
+            if (checkAdmin != null)
             {
-                
-                HttpContext.Session.SetString("email", checkLogin.Email);
-                HttpContext.Session.SetString("clave", checkLogin.Contraseña);
-                HttpContext.Session.SetString("nombreUsuario", checkLogin.NombreUsuario);
+                // Iniciar sesión como administrador
+                HttpContext.Session.SetString("email", checkAdmin.Email);
+                HttpContext.Session.SetString("nombreUsuario", checkAdmin.Nombre);
+                HttpContext.Session.SetString("rol", "Admin");
 
-                return RedirectToAction("Index", "Home");
-            }
-            else
-            {
-                ViewBag.Notification = "Email o clave incorrectas";
+                return RedirectToAction("Index", "Home"); // Redirigir al panel de administración
             }
 
+            // Verificar si es un usuario común
+            var checkUsuario = db.Usuarios
+                .FirstOrDefault(x => x.Email.Equals(usuario.Email) && x.Contraseña.Equals(usuario.Contraseña));
+
+            if (checkUsuario != null)
+            {
+                // Iniciar sesión como usuario común
+                HttpContext.Session.SetString("email", checkUsuario.Email);
+                HttpContext.Session.SetString("nombreUsuario", checkUsuario.NombreUsuario);
+                HttpContext.Session.SetString("rol", "Usuario");
+
+                return RedirectToAction("Index", "Home"); // Redirigir al área de usuario
+            }
+
+            // Si no es ni administrador ni usuario, mostrar error
+            ViewBag.Notification = "Email o clave incorrectas";
             return View();
         }
+
 
         public ActionResult Logout()
         {
@@ -86,22 +104,22 @@ namespace Proyecto_Final.Controllers
         {
             if (db.Usuarios.Any(x => x.Email == usuario.Email))
             {
-                
+
                 ViewBag.Notification = "Esta cuenta ya existe";
                 return View();
             }
             else
             {
-                
+
                 db.Usuarios.Add(usuario);
                 db.SaveChanges();
 
-                
+
                 HttpContext.Session.SetString("email", usuario.Email);
                 HttpContext.Session.SetString("contraseña", usuario.Contraseña);
                 HttpContext.Session.SetString("nombreUsuario", usuario.NombreUsuario);
 
-                
+
                 return RedirectToAction("Index", "Home");
             }
         }
@@ -126,5 +144,7 @@ namespace Proyecto_Final.Controllers
         {
             return View("Pestaña_Venta/BuyNow");
         }
+
+        
     }
 }
