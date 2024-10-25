@@ -15,6 +15,7 @@ public partial class Juego
     public string Genero { get; set; }
 
     public int? ItiPlus { get; set; }
+
     public decimal? Precio { get; set; }
 
     public string Desarrolladora { get; set; }

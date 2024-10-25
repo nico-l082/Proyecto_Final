@@ -170,14 +170,6 @@ namespace Proyecto_Final.Controllers
             return File(fileBytes, "application/pdf", fileName);
         }
 
-
-
-        
-
-
-
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult LogIn(Models.Usuario usuario)
