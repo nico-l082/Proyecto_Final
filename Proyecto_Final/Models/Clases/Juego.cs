@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Proyecto_Final.Models.Clases;
 
 public partial class Juego
 {
+    [Key]
     public int IdJuegos { get; set; }
 
     public string Nombre { get; set; } = null!;
@@ -18,6 +21,8 @@ public partial class Juego
     public decimal Precio { get; set; }
 
     public string Desarrolladora { get; set; } = null!;
+    [NotMapped]
+    public string ImagenUrl { get; set; } = null!;
 
     public virtual ICollection<Biblioteca> Bibliotecas { get; set; } = new List<Biblioteca>();
 

@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace Proyecto_Final.Models;
 
 public partial class Usuario
 {
-    [Key]
     public int IdUsuarios { get; set; }
 
     public string NombreUsuario { get; set; }

@@ -19,6 +19,23 @@
 #centrado {
     text-align: center !important;
 }
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    font-weight: bold;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
 
 #hola {
     transition: transform 0.3s;

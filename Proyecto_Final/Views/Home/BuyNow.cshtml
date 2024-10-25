@@ -1,0 +1,102 @@
+﻿@model Proyecto_Final.Models.Juego
+
+@{
+    ViewData["Title"] = "BuyNow";
+}
+<h1>Comprar @Model.Nombre</h1>
+
+<div class="juego-detalle">
+    <h2>@Model.Nombre</h2>
+    <p>@Model.Descripcion</p>
+    <p><strong>Género:</strong> @Model.Genero</p>
+    <p><strong>Precio:</strong> $@Model.Precio</p>
+    <p><strong>Desarrolladora:</strong> @Model.Desarrolladora</p>
+</div>
+
+<!-- Formulario de compra -->
+<form asp-action="ConfirmPurchase" method="post" class="carrito-formulario">
+    <input type="hidden" name="JuegoId" value="@Model.IdJuegos" /> <!-- Campo oculto para el ID del juego -->
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="form-group">
+        <label class="control-label">Nombre</label>
+        <input type="text" name="Nombre" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Apellido</label>
+        <input type="text" name="Apellido" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">DNI</label>
+        <input type="text" name="DNI" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Num. Tarjeta</label>
+        <input type="text" name="NumeroTarjeta" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Vencimiento</label>
+        <input type="text" name="Vencimiento" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Código</label>
+        <input type="text" name="Codigo" class="form-control" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Continuar</button> <!-- Botón para enviar -->
+</form>
+
+
+
+<style>
+
+    .carrito-formulario {
+        max-width: 600px; 
+        margin: 20px auto; 
+        padding: 20px;
+        border: 1px solid #ddd; 
+        border-radius: 8px; 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #f3fb8a; 
+    }
+
+  
+    .form-group {
+        margin-bottom: 15px; 
+    }
+
+   
+    .form-group label {
+        display: block; 
+        margin-bottom: 5px; 
+        font-weight: bold; 
+        color: #333; 
+    }
+
+    /* Estilo de los inputs */
+    .form-group input {
+        width: 100%; 
+        padding: 10px; 
+        border: 1px solid #ccc;
+        border-radius: 4px; 
+        font-size: 16px; 
+        transition: border-color 0.3s; 
+    }
+    .form-group input:focus {
+        border-color: #007bff; 
+        outline: none; 
+    }
+
+  
+    .text-danger {
+        color: red; 
+        font-size: 14px; 
+        margin-top: 5px; 
+    }
+
+</style>

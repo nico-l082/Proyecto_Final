@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace Proyecto_Final.Models;
 
 public partial class Biblioteca
 {
-    [Key]
     public int IdBiblio { get; set; }
 
     public string Nombre { get; set; }

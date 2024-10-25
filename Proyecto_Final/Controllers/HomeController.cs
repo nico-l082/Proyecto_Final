@@ -30,16 +30,25 @@ namespace Proyecto_Final.Controllers
         {
             _logger = logger;
         }
+        
         public IActionResult Index()
         {
-            var _usuarios = db.Usuarios.ToList();
-            return View(_usuarios);
+            var juegos = db.Juegos.ToList(); 
+            return View(juegos); 
         }
+
         public IActionResult Nosotros()
+        { 
+            return View(); 
+        }
+        public IActionResult Soporte()
         {
             return View();
         }
-       
+        public IActionResult MisJuegos()
+        {
+            return View();
+        }
         
         [HttpGet]
         public ActionResult LogIn()
@@ -274,11 +283,30 @@ namespace Proyecto_Final.Controllers
 
         public IActionResult Cs2()
         {
-            return View("Pestaña_Venta/cs2");
+            return View("Pestaña_Juegos/cs2");
         }
-        public IActionResult BuyNow()
+        public IActionResult BuyNow(int id) // Este es el único método BuyNow
         {
-            return View("Pestaña_Venta/BuyNow");
+            var juego = db.Juegos.Find(id);
+            if (juego == null)
+            {
+                return NotFound();
+            }
+            return View(juego);
+        }
+
+        // Método adicional para procesar la compra
+        [HttpPost]
+        public IActionResult BuyNow() // Este método es diferente
+        {
+            if (ModelState.IsValid)
+            {
+                // Procesar la compra
+                // ...
+                return RedirectToAction("Success"); // O cualquier otra acción
+            }
+
+            return View(); // Retornar al formulario si hay errores
         }
 
 
@@ -290,10 +318,9 @@ namespace Proyecto_Final.Controllers
 
 
 
-        
 
-        
 
-       
+
+
     }
 }

@@ -1,14 +1,15 @@
-﻿using iText.Pdfua.Checkers.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Proyecto_Final.Models;
 
 public partial class Juego
 {
     [Key]
     public int IdJuegos { get; set; }
-
+    
     public string Nombre { get; set; }
 
     public string Descripcion { get; set; }
