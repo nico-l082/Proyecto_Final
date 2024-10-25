@@ -16,6 +16,7 @@ using iText.Layout;
 using System.IO;
 using System.Linq;
 using iText.Html2pdf;
+using OfficeOpenXml;
 
 namespace Proyecto_Final.Controllers
 {
@@ -62,13 +63,13 @@ namespace Proyecto_Final.Controllers
         [HttpPost]
         public IActionResult Eliminar(int id)
         {
-            var usuario = db.Usuarios.Find(id); // Encuentra al usuario por ID
+            var usuario = db.Usuarios.Find(id);
             if (usuario != null)
             {
-                db.Usuarios.Remove(usuario); // Elimina el usuario
-                db.SaveChanges(); // Guarda los cambios en la base de datos
+                db.Usuarios.Remove(usuario);
+                db.SaveChanges();
             }
-            return RedirectToAction("GestionarUsuarios"); // Redirige de nuevo a la lista de usuarios
+            return RedirectToAction("GestionarUsuarios");
         }
 
 
@@ -76,26 +77,26 @@ namespace Proyecto_Final.Controllers
         {
             var usuarios = db.Usuarios.ToList();
 
-            // Crear un stream para el PDF
+           
             using (MemoryStream ms = new MemoryStream())
             {
-                // Crear el documento PDF
+               
                 PdfWriter writer = new PdfWriter(ms);
                 PdfDocument pdfDoc = new PdfDocument(writer);
                 Document document = new Document(pdfDoc);
 
-                // Agregar título al PDF
+               
                 document.Add(new Paragraph("Lista de Usuarios").SetFontSize(20));
 
-                // Crear tabla para los datos de los usuarios
-                Table table = new Table(3, true); // 3 columnas
+                
+                Table table = new Table(3, true); 
 
-                // Encabezados de la tabla
+              
                 table.AddCell("ID");
                 table.AddCell("Nombre Usuario");
                 table.AddCell("Email");
 
-                // Rellenar la tabla con los datos de los usuarios
+               
                 foreach (var usuario in usuarios)
                 {
                     table.AddCell(usuario.IdUsuarios.ToString());
@@ -103,33 +104,33 @@ namespace Proyecto_Final.Controllers
                     table.AddCell(usuario.Email);
                 }
 
-                document.Add(table); // Agregar la tabla al documento
+                document.Add(table); 
 
-                // Cerrar el documento
+               
                 document.Close();
 
-                // Devolver el PDF como archivo descargable
+                
                 return File(ms.ToArray(), "application/pdf", "ListaUsuarios.pdf");
             }
         }
 
         public IActionResult GenerateCS2Pdf()
         {
-            // Ruta de la carpeta 'pdfs'
+           
             var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "pdfs");
             var fileName = "CounterStrike2.pdf";
             var filePath = Path.Combine(folderPath, fileName);
 
-            // Verifica si la carpeta 'pdfs' existe, si no, la crea
+            
             if (!Directory.Exists(folderPath))
             {
                 Directory.CreateDirectory(folderPath);
             }
 
-            // Ruta absoluta de la imagen
+           
             var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "lib", "imagenes_juegos", "cs2.jpg");
 
-            // HTML del contenido con imagen incluida
+            
             var htmlContent = $@"
             <html>
             <head>
@@ -158,17 +159,27 @@ namespace Proyecto_Final.Controllers
             </body>
             </html>";
 
-            // Crear el archivo PDF desde el HTML
+            
             using (FileStream pdfDest = new FileStream(filePath, FileMode.Create))
             {
                 ConverterProperties properties = new ConverterProperties();
                 HtmlConverter.ConvertToPdf(htmlContent, pdfDest, properties);
             }
 
-            // Descargar el archivo PDF
+         
             byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
             return File(fileBytes, "application/pdf", fileName);
         }
+
+
+
+
+
+
+
+
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -180,35 +191,35 @@ namespace Proyecto_Final.Controllers
                 return View();
             }
 
-            // Verificar si es un administrador
+       
             var checkAdmin = db.Admins
                 .FirstOrDefault(x => x.Email.Equals(usuario.Email) && x.Contraseña.Equals(usuario.Contraseña));
 
             if (checkAdmin != null)
             {
-                // Iniciar sesión como administrador
+            
                 HttpContext.Session.SetString("email", checkAdmin.Email);
                 HttpContext.Session.SetString("nombreUsuario", checkAdmin.Nombre);
                 HttpContext.Session.SetString("rol", "Admin");
 
-                return RedirectToAction("Index", "Home"); // Redirigir al panel de administración
+                return RedirectToAction("Index", "Home"); 
             }
 
-            // Verificar si es un usuario común
+           
             var checkUsuario = db.Usuarios
                 .FirstOrDefault(x => x.Email.Equals(usuario.Email) && x.Contraseña.Equals(usuario.Contraseña));
 
             if (checkUsuario != null)
             {
-                // Iniciar sesión como usuario común
+               
                 HttpContext.Session.SetString("email", checkUsuario.Email);
                 HttpContext.Session.SetString("nombreUsuario", checkUsuario.NombreUsuario);
                 HttpContext.Session.SetString("rol", "Usuario");
 
-                return RedirectToAction("Index", "Home"); // Redirigir al área de usuario
+                return RedirectToAction("Index", "Home"); 
             }
 
-            // Si no es ni administrador ni usuario, mostrar error
+            
             ViewBag.Notification = "Email o clave incorrectas";
             return View();
         }

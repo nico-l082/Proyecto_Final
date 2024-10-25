@@ -48,6 +48,9 @@
     grid-template-columns: 1fr 1fr;
     gap: 10px;
 }
+.team-member{
+    margin-bottom: 3.5rem;
+}
 
 #buy_now {
     background: rgba(98,125,77,1);

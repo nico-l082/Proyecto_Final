@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.ComponentModel.DataAnnotations;
 namespace Proyecto_Final.Models;
 
 public partial class MiembrosPlu
 {
+    [Key]
     public int IdMiembros { get; set; }
 
     public int? Tipo { get; set; }
