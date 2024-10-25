@@ -26,18 +26,18 @@
                             <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item" id="hola">
-                            <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="Privacy">Nosotros</a>
+                            <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="Nosotros">Nosotros</a>
                         </li>                 
                         <li class="nav-item" id="hola">
                             <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="Privacy">Soporte</a>
                         </li>
                         <li class="nav-item" id="hola">
-                            <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="Privacy">Mis Juegos</a>
+                            <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="MisJuegos">Mis Juegos</a>
                         </li>
                         @if (Context.Session.GetString("rol") == "Admin")
                         {                                                    
                             <li class="nav-item">
-                                <a class="nav-link text-dark m-3" asp-area="" asp-controller="Usuarios" asp-action="GestionarUsuarios">Gestionar Usuarios</a>
+                                <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="GestionarUsuarios">Gestionar Usuarios</a>
                             </li>
                         }                        
                     </ul>

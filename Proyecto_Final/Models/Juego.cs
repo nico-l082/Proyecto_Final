@@ -1,4 +1,5 @@
-﻿using System;
+﻿using iText.Pdfua.Checkers.Utils;
+using System;
 using System.Collections.Generic;
 
 namespace Proyecto_Final.Models;
@@ -14,7 +15,6 @@ public partial class Juego
     public string Genero { get; set; }
 
     public int? ItiPlus { get; set; }
-
     public decimal? Precio { get; set; }
 
     public string Desarrolladora { get; set; }

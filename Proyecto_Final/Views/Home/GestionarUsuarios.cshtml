@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Proyecto_Final.Models.Usuario>
+
+@{
+    ViewData["Title"] = "Lista de Usuarios";
+}
+
+<h1>Lista de Usuarios</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any()) // Verifica si Model no es null y tiene elementos
+        {
+            foreach (var usuario in Model)
+            {
+                <tr>
+                    <td>@usuario.NombreUsuario</td>
+                    <td>@usuario.Email</td>
+                    <td>
+                        <form asp-action="Eliminar" asp-controller="Home" method="post" style="display:inline;">
+                            <input type="hidden" name="id" value="@usuario.IdUsuarios" />
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('¿Está seguro de que desea eliminar a este usuario?');">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3">No hay usuarios disponibles.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a href="@Url.Action("DescargarPDF", "Home")" class="btn btn-primary">Descargar lista de usuarios en PDF</a>
