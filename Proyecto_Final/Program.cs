@@ -1,11 +1,17 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-
+using Proyecto_Final.Servicios;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configurar los servicios
+builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddTransient<IServicioEmail, ServicioEmail>();
+
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(option =>
     {
@@ -40,9 +46,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+
+
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.UseSession();
 
 app.MapControllerRoute(

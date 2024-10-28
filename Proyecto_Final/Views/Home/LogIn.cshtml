@@ -9,11 +9,11 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="LogIn">
+        <form asp-action="LogIn" class="login-formulario">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" type="email"/>
+                <input asp-for="Email" class="form-control" type="email" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -28,13 +28,88 @@
                 <label>@ViewBag.Notification</label>
             </div>
         </form>
-    </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+    </div>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<style>
+    
+    .login-formulario {
+        max-width: 400px; 
+        margin: 20px auto; 
+        padding: 20px; 
+        border: 1px solid #ddd;
+        border-radius: 8px; 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+        background-color: #f3fb8a; 
+    }
+
+ 
+    .form-group {
+        margin-bottom: 15px; 
+    }
+
+     
+    .form-group label {
+        display: block;
+        margin-bottom: 5px; 
+        font-weight: bold; 
+        color: #333;
+    }
+
+      
+    .form-group input {
+        width: 100%; 
+        padding: 10px; 
+        border: 1px solid #ccc; 
+        border-radius: 4px; 
+        font-size: 16px; 
+        transition: border-color 0.3s; 
+    }
+
+            
+    .form-group input:focus {
+        border-color: #007bff; 
+        outline: none; 
+    }
+
+  
+    .text-danger {
+        color: red; 
+        font-size: 14px; 
+        margin-top: 5px;
+    }
+
+  
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        padding: 10px 15px; 
+        font-size: 16px; 
+        border-radius: 4px; 
+        cursor: pointer; 
+    }
+
+   
+    .btn-primary:hover {
+        background-color: #0056b3; 
+        border-color: #0056b3; 
+    }
+
+  
+    a {
+        display: inline-block; 
+        margin-top: 10px; 
+        color: #007bff; 
+        text-decoration: none; 
+    }
+
+    a:hover {
+        text-decoration: underline; 
+    }
+
+</style>

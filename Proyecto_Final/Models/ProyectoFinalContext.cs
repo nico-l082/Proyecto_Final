@@ -15,6 +15,8 @@ public partial class ProyectoFinalContext : DbContext
     {
     }
 
+    public virtual DbSet<Admin> Admins { get; set; }
+
     public virtual DbSet<Biblioteca> Bibliotecas { get; set; }
 
     public virtual DbSet<Juego> Juegos { get; set; }
@@ -28,10 +30,32 @@ public partial class ProyectoFinalContext : DbContext
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+
         => optionsBuilder.UseSqlServer("Server=Nico_Desktop;Initial Catalog=Proyecto_Final;User ID=sa;Password=Malg123;Encrypt=True;Trust Server Certificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Admin>(entity =>
+        {
+            entity.HasKey(e => e.IdAdmin).HasName("PK__Admin__B2C3ADE5F2A5DF96");
+
+            entity.ToTable("Admin");
+
+            entity.Property(e => e.IdAdmin).HasColumnName("idAdmin");
+            entity.Property(e => e.Contraseña)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("contraseña");
+            entity.Property(e => e.Email)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("email");
+            entity.Property(e => e.Nombre)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("nombre");
+        });
+
         modelBuilder.Entity<Biblioteca>(entity =>
         {
             entity.HasKey(e => e.IdBiblio).HasName("PK__Bibliote__C721831F871764D8");
@@ -67,6 +91,10 @@ public partial class ProyectoFinalContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("genero");
+            entity.Property(e => e.ImagenUrl)
+                .HasMaxLength(225)
+                .IsUnicode(false)
+                .HasColumnName("imagenURL");
             entity.Property(e => e.ItiPlus).HasColumnName("itiPlus");
             entity.Property(e => e.Nombre)
                 .HasMaxLength(100)

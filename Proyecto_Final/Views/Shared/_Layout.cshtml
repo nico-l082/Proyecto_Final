@@ -26,14 +26,30 @@
                             <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item" id="hola">
-                            <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="Privacy">Nosotros</a>
+                            <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="Nosotros">Nosotros</a>
                         </li>                 
                         <li class="nav-item" id="hola">
-                            <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="Privacy">Soporte</a>
+                            <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="Soporte">Soporte</a>
                         </li>
-                        <li class="nav-item" id="hola">
-                            <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="Privacy">Mis Juegos</a>
-                        </li>
+                        
+                        @if (Context.Session.GetString("rol") == "Admin")
+                        {
+                            <li class="nav-item" id="hola">
+                                <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="MisJuegos">Mis Juegos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="hola" class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="GestionarUsuarios">Gestionar Usuarios</a>
+                            </li>
+                        }else
+                        {
+                            if(Context.Session.GetString("rol")=="Usuario")
+                            {
+                                <li class="nav-item" id="hola">
+                                    <a class="nav-link text-dark m-3" asp-area="" asp-controller="Home" asp-action="MisJuegos">Mis Juegos</a>
+                                </li>
+                            }
+                        }
+
                     </ul>
                 </div>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-end">
@@ -78,7 +94,6 @@
                             </ul>
                         </div>                        
                     }
-
                 </div>
             </div>
         </nav>

@@ -13,5 +13,5 @@ public partial class TipoMembresium
 
     public virtual ICollection<MiembrosPlu> MiembrosPlus { get; set; } = new List<MiembrosPlu>();
 
-    public virtual Membresium? TipoNavigation { get; set; }
+    public virtual Membresium TipoNavigation { get; set; }
 }

@@ -7,9 +7,9 @@ public partial class Membresium
 {
     public int IdMembresia { get; set; }
 
-    public string? Nombre { get; set; }
+    public string Nombre { get; set; }
 
-    public string? Detalle { get; set; }
+    public string Detalle { get; set; }
 
     public int? TipoMembresia { get; set; }
 
