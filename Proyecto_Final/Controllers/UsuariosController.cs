@@ -8,47 +8,54 @@ namespace Proyecto_Final.Controllers
     public class UsuariosController : Controller
     {
         private readonly ApplicationDbContext _context;
+        ProyectoFinalContext db = new ProyectoFinalContext();
 
- 
         public UsuariosController()
         {
             _context = new ApplicationDbContext();
         }
 
 
-        public ActionResult DescargarUsuariosExcel()
+        public IActionResult DownloadAllUsersExcel()
         {
+            // Establece el contexto de licencia
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-            List<Usuario> usuarios = _context.Usuarios.ToList();
-
-            if (usuarios == null || usuarios.Count == 0)
+            // Recupera todos los usuarios de la base de datos
+            var usuarios = db.Usuarios.ToList();
+            if (usuarios == null || !usuarios.Any())
             {
-                Console.WriteLine("No se encontraron usuarios en la base de datos.");
-            }
-            else
-            {
-                Console.WriteLine($"Usuarios encontrados: {usuarios.Count}");
+                return NotFound("No hay usuarios disponibles para descargar.");
             }
 
+            // Crea un nuevo paquete de Excel
             using (var package = new ExcelPackage())
             {
-                var worksheet = package.Workbook.Worksheets.Add("Usuarios");
+                // Agrega una nueva hoja de trabajo
+                var worksheet = package.Workbook.Worksheets.Add("Lista de Usuarios");
 
-                worksheet.Cells[1, 1].Value = "ID";
-                worksheet.Cells[1, 2].Value = "Nombre";
-                worksheet.Cells[1, 3].Value = "Email";
+                // Agrega los encabezados de columna
+                worksheet.Cells[1, 1].Value = "Nombre";
+                worksheet.Cells[1, 2].Value = "Email";
 
-                for (int i = 0; i < usuarios.Count; i++)
+                // Agrega los datos de los usuarios
+                int row = 2;
+                foreach (var usuario in usuarios)
                 {
-                    worksheet.Cells[i.ToString()].Value = usuarios[i].IdUsuarios;
-                    worksheet.Cells[i.ToString()].Value = usuarios[i].NombreUsuario;
-                    worksheet.Cells[i.ToString()].Value = usuarios[i].Email;
+                    worksheet.Cells[row, 1].Value = usuario.NombreUsuario;
+                    worksheet.Cells[row, 2].Value = usuario.Email;
+                    row++;
                 }
 
+                // Ajusta el ancho de las columnas
                 worksheet.Cells.AutoFitColumns();
-                var excelBytes = package.GetAsByteArray();
-                return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Usuarios.xlsx");
+
+                // Prepara el archivo para ser descargado
+                var stream = new MemoryStream();
+                package.SaveAs(stream);
+                stream.Position = 0;
+
+                return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "lista_usuarios.xlsx");
             }
         }
 

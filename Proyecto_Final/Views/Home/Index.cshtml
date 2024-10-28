@@ -3,23 +3,26 @@
 @{
     ViewData["Title"] = "Juegos";
 }
-
-<h1>Catálogo de Juegos</h1>
+<div style="text-align:center;">
+    <h1>Catálogo de Juegos</h1>
+</div>
+<hr />
 <div class="juegos-grid">
     @foreach (var juego in Model)
     {
-        <div class="juego-card">
-            
+        <div class="juego-card" style="margin-bottom:0%">
+            <img src="@Url.Content(juego.ImagenUrl)" alt="Imagen de @juego.Nombre" class="juego-imagen" />
             <h2 class="juego-nombre">@juego.Nombre</h2>
             <p class="juego-descripcion">@juego.Descripcion</p>
             <p><strong>Género:</strong> @juego.Genero</p>
-            <p><strong>Precio:</strong> $@juego.Precio</p>
+            <p><strong>Precio:</strong> Usdt$@juego.Precio</p>
             <p><strong>Desarrolladora:</strong> @juego.Desarrolladora</p>
-
-            <a href="@Url.Action("BuyNow", "Home", new { id = juego.IdJuegos })">
-                <span class="btn-comprar">Comprar</span>
-            </a>
-
+            <div style="margin-top: 5rem; text-align: center;">
+                <a href="@Url.Action("BuyNow", "Home", new { id = juego.IdJuegos })">
+                    <span class="btn-comprar">Comprar</span>
+                </a>
+            </div>
+            
             
         </div>
     }
@@ -37,15 +40,16 @@
         border: 1px solid #ddd;
         border-radius: 8px;
         padding: 16px;
-        text-align: center;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         background-color: #f3fb8a;
     }
 
     .juego-imagen {
-        max-width: 100%;
-        height: auto;
+        width: 100%; 
+        height: 200px; 
+        object-fit: cover; 
         border-radius: 8px;
+        margin-bottom: 10px;
     }
 
     .juego-nombre {

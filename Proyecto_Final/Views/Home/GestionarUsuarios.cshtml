@@ -28,8 +28,15 @@
                             <button type="submit" class="btn btn-danger" onclick="return confirm('¿Está seguro de que desea eliminar a este usuario?');">Eliminar</button>
                         </form>
                     </td>
-                </tr>
+                    <td>
+                        <form asp-action="DownloadProductPdf2" method="post" style="display:inline;">
+                            <input type="hidden" name="id" value="@usuario.IdUsuarios" />
+                            <button type="submit" class="btn btn-primary">Descargar PDF</button>
+                        </form>
+                    </td>
+                </tr>                
             }
+            
         }
         else
         {
@@ -39,5 +46,5 @@
         }
     </tbody>
 </table>
-<a href="@Url.Action("DescargarPDF", "Home")" class="btn btn-primary">Descargar lista de usuarios en PDF</a>
-<a href="@Url.Action("DescargarUsuariosExcel", "Usuarios")" class="btn btn-primary">Descargar lista de usuarios en Excel</a>
+<a asp-action="DownloadAllUsersPdf" asp-controller="Home" class="btn btn-primary">Descargar lista de usuarios en PDF</a>
+<a href="@Url.Action("DownloadAllUsersExcel", "Usuarios")" class="btn btn-primary">Descargar lista de usuarios en Excel</a>

@@ -1,4 +1,5 @@
-﻿@model Proyecto_Final.Models.Juego
+﻿@using Proyecto_Final.Models.Clases
+@model Proyecto_Final.Models.Juego
 
 @{
     ViewData["Title"] = "BuyNow";
@@ -6,16 +7,20 @@
 <h1>Comprar @Model.Nombre</h1>
 
 <div class="juego-detalle">
+    <div style="text-align:center">
+        <img src="@Url.Content(Model.ImagenUrl)" alt="Imagen de @Model.Nombre" class="juego-imagen" style="height: auto;width: 20rem;" />
+    </div>    
     <h2>@Model.Nombre</h2>
     <p>@Model.Descripcion</p>
     <p><strong>Género:</strong> @Model.Genero</p>
-    <p><strong>Precio:</strong> $@Model.Precio</p>
+    <p><strong>Precio:</strong> Usdt$@Model.Precio</p>
     <p><strong>Desarrolladora:</strong> @Model.Desarrolladora</p>
 </div>
 
-<!-- Formulario de compra -->
+<a href="@Url.Action("DownloadProductPdf", "Home", new { id = Model.IdJuegos })" class="btn btn-secondary">Descargar en PDF</a>
+
 <form asp-action="ConfirmPurchase" method="post" class="carrito-formulario">
-    <input type="hidden" name="JuegoId" value="@Model.IdJuegos" /> <!-- Campo oculto para el ID del juego -->
+    <input type="hidden" name="JuegoId" value="@Model.IdJuegos" /> 
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
     <div class="form-group">
@@ -48,7 +53,7 @@
         <input type="text" name="Codigo" class="form-control" required />
     </div>
 
-    <button type="submit" class="btn btn-primary">Continuar</button> <!-- Botón para enviar -->
+    <button type="submit" class="btn btn-primary">Continuar</button> 
 </form>
 
 

@@ -13,10 +13,14 @@ using Microsoft.AspNetCore.Authorization;
 using iText.Kernel.Pdf;
 using iText.Layout.Element;
 using iText.Layout;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 using System.IO;
 using System.Linq;
 using iText.Html2pdf;
 using OfficeOpenXml;
+using Paragraph = iTextSharp.text.Paragraph;
+using Document = iTextSharp.text.Document;
 
 namespace Proyecto_Final.Controllers
 {
@@ -82,112 +86,94 @@ namespace Proyecto_Final.Controllers
         }
 
 
-        public IActionResult DescargarPDF()
+        
+
+
+
+
+        public IActionResult DownloadProductPdf(int id)
         {
-            var usuarios = db.Usuarios.ToList();
-
-           
-            using (MemoryStream ms = new MemoryStream())
+            var juego = db.Juegos.FirstOrDefault(j => j.IdJuegos == id);
+            if (juego == null)
             {
-               
-                PdfWriter writer = new PdfWriter(ms);
-                PdfDocument pdfDoc = new PdfDocument(writer);
-                Document document = new Document(pdfDoc);
+                return NotFound();
+            }
 
-               
-                document.Add(new Paragraph("Lista de Usuarios").SetFontSize(20));
+            using (var stream = new MemoryStream())
+            {
+                var document = new Document(PageSize.A4);
+                iTextSharp.text.pdf.PdfWriter.GetInstance(document, stream).CloseStream = false;
+                document.Open();
 
-                
-                Table table = new Table(3, true); 
+                document.Add(new Paragraph("Detalle del Producto"));
+                document.Add(new Paragraph($"Nombre: {juego.Nombre}"));
+                document.Add(new Paragraph($"Descripción: {juego.Descripcion}"));
+                document.Add(new Paragraph($"Género: {juego.Genero}"));
+                document.Add(new Paragraph($"Precio: ${juego.Precio}"));
+                document.Add(new Paragraph($"Desarrolladora: {juego.Desarrolladora}"));
 
-              
-                table.AddCell("ID");
-                table.AddCell("Nombre Usuario");
-                table.AddCell("Email");
-
-               
-                foreach (var usuario in usuarios)
-                {
-                    table.AddCell(usuario.IdUsuarios.ToString());
-                    table.AddCell(usuario.NombreUsuario);
-                    table.AddCell(usuario.Email);
-                }
-
-                document.Add(table); 
-
-               
                 document.Close();
 
-                
-                return File(ms.ToArray(), "application/pdf", "ListaUsuarios.pdf");
+                return File(stream.ToArray(), "application/pdf", $"{juego.Nombre}_detalle.pdf");
             }
         }
 
-        public IActionResult GenerateCS2Pdf()
+        public IActionResult DownloadAllUsersPdf()
         {
-           
-            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "pdfs");
-            var fileName = "CounterStrike2.pdf";
-            var filePath = Path.Combine(folderPath, fileName);
-
-            
-            if (!Directory.Exists(folderPath))
+            var usuarios = db.Usuarios.ToList();
+            if (usuarios == null || !usuarios.Any())
             {
-                Directory.CreateDirectory(folderPath);
+                return NotFound("No hay usuarios disponibles para descargar.");
             }
 
-           
-            var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "lib", "imagenes_juegos", "cs2.jpg");
-
-            
-            var htmlContent = $@"
-            <html>
-            <head>
-                <title>Counter Strike 2</title>
-            </head>
-            <body>
-                <h1>Counter Strike 2</h1>
-                <img src='file:///{imagePath}' alt='CS2' style='width: 300px;' />
-                <sapn><br />
-                    Counter-Strike 2 es la última entrega de la icónica serie de juegos de disparos en primera persona (FPS) desarrollada por Valve Corporation. Lanzado en 2023 como una actualización masiva de Counter-Strike: Global Offensive (CS:GO), este juego mantiene la esencia del clásico Counter-Strike al tiempo que introduce mejoras significativas en gráficos, jugabilidad y mecánicas.
-                    <br />
-                    <b style=""font-size:1.2rem;"">Características Clave:</b>
-                    <ul>
-                        <li>Gráficos Mejorados: Utiliza un nuevo motor gráfico, Source 2, que proporciona entornos más detallados, efectos visuales mejorados y una experiencia más inmersiva.</li>
-                        <li>Nuevas Mecánicas de Juego: Introduce mecánicas de juego mejoradas, como la posibilidad de lanzar armas, nuevos sistemas de movimiento y un enfoque en la física para una jugabilidad más realista.</li>
-                        <li>Mapas Actualizados: Incluye versiones reimaginadas de mapas clásicos junto con nuevos entornos diseñados para aprovechar las capacidades gráficas avanzadas del motor.</li>
-                        <li>Sistema de Jugabilidad Dinámico: Presenta cambios en la economía del juego y en la forma en que se distribuyen las armas y el equipo, ofreciendo una experiencia más estratégica.</li>
-                        <li>Accesibilidad y Experiencia de Usuario: Mejora en la interfaz de usuario, así como opciones de accesibilidad que hacen que el juego sea más amigable para nuevos jugadores, sin perder la profundidad que caracteriza a la serie.</li>
-                        <li>Modos de Juego Variados: Además de los clásicos modos de juego como ""Desactivación de Bomba"" y ""Rescate de Rehenes"", incluye nuevas modalidades que fomentan la cooperación y el juego competitivo.</li>
-                        <li>Comunidad y Competitividad: Al igual que sus predecesores, Counter-Strike 2 sigue promoviendo una fuerte comunidad competitiva, con soporte para torneos y ligas, así como herramientas para creadores de contenido y mods.</li>
-                    </ul>
-                    <b style=""font-size:1.2rem;"">Resumen:</b>
-                    <br />
-                    Counter-Strike 2 no solo es una continuación de la serie, sino una reinvención que busca atraer tanto a los veteranos de la saga como a nuevos jugadores. Con su enfoque en la estrategia, la precisión y el trabajo en equipo, promete ser una experiencia emocionante en el mundo de los eSports y los juegos de disparos en primera persona.
-                </sapn>
-            </body>
-            </html>";
-
-            
-            using (FileStream pdfDest = new FileStream(filePath, FileMode.Create))
+            using (var stream = new MemoryStream())
             {
-                ConverterProperties properties = new ConverterProperties();
-                HtmlConverter.ConvertToPdf(htmlContent, pdfDest, properties);
-            }
+                var document = new Document(PageSize.A4);
+                iTextSharp.text.pdf.PdfWriter.GetInstance(document, stream).CloseStream = false;
+                document.Open();
 
-         
-            byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
-            return File(fileBytes, "application/pdf", fileName);
+                document.Add(new Paragraph("Lista de Usuarios"));
+                document.Add(new Paragraph("----------------------------------------------------------"));
+
+                foreach (var usuario in usuarios)
+                {
+                    document.Add(new Paragraph($"Nombre: {usuario.NombreUsuario}"));
+                    document.Add(new Paragraph($"Email: {usuario.Email}"));
+                    document.Add(new Paragraph("----------------------------------------------------------"));                                    
+                }
+
+                document.Close();
+
+                return File(stream.ToArray(), "application/pdf", "lista_usuarios.pdf");
+            }
         }
 
 
+        public IActionResult DownloadProductPdf2(int id)
+        {
+            var usuario = db.Usuarios.FirstOrDefault(u => u.IdUsuarios == id);
+            if (usuario == null)
+            {
+                return NotFound();
+            }
 
+            using (var stream = new MemoryStream())
+            {
+              
+                var document = new Document(PageSize.A4);
+                iTextSharp.text.pdf.PdfWriter.GetInstance(document, stream).CloseStream = false;
+                document.Open();
 
+              
+                document.Add(new Paragraph("Detalle del Usuario"));
+                document.Add(new Paragraph($"Nombre de Usuario: {usuario.NombreUsuario}"));
+                document.Add(new Paragraph($"Email: {usuario.Email}"));
 
+                document.Close();
 
-
-
-
+                return File(stream.ToArray(), "application/pdf", $"{usuario.NombreUsuario}_detalle.pdf");
+            }
+        }
 
 
         [HttpPost]
@@ -285,7 +271,7 @@ namespace Proyecto_Final.Controllers
         {
             return View("Pestaña_Juegos/cs2");
         }
-        public IActionResult BuyNow(int id) // Este es el único método BuyNow
+        public IActionResult BuyNow(int id) 
         {
             var juego = db.Juegos.Find(id);
             if (juego == null)
@@ -295,18 +281,17 @@ namespace Proyecto_Final.Controllers
             return View(juego);
         }
 
-        // Método adicional para procesar la compra
+     
         [HttpPost]
-        public IActionResult BuyNow() // Este método es diferente
+        public IActionResult BuyNow() 
         {
             if (ModelState.IsValid)
             {
-                // Procesar la compra
-                // ...
-                return RedirectToAction("Success"); // O cualquier otra acción
+                
+                return RedirectToAction("Success"); 
             }
 
-            return View(); // Retornar al formulario si hay errores
+            return View(); 
         }
 
 

@@ -30,6 +30,7 @@ public partial class ProyectoFinalContext : DbContext
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+
         => optionsBuilder.UseSqlServer("Server=Nico_Desktop;Initial Catalog=Proyecto_Final;User ID=sa;Password=Malg123;Encrypt=True;Trust Server Certificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -90,6 +91,10 @@ public partial class ProyectoFinalContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("genero");
+            entity.Property(e => e.ImagenUrl)
+                .HasMaxLength(225)
+                .IsUnicode(false)
+                .HasColumnName("imagenURL");
             entity.Property(e => e.ItiPlus).HasColumnName("itiPlus");
             entity.Property(e => e.Nombre)
                 .HasMaxLength(100)
