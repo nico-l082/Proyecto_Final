@@ -21,6 +21,8 @@ using iText.Html2pdf;
 using OfficeOpenXml;
 using Paragraph = iTextSharp.text.Paragraph;
 using Document = iTextSharp.text.Document;
+using System.Data.Entity.Infrastructure;
+using Proyecto_Final.Data;
 
 namespace Proyecto_Final.Controllers
 {
@@ -34,7 +36,6 @@ namespace Proyecto_Final.Controllers
         {
             _logger = logger;
         }
-        
         public IActionResult Index()
         {
             var juegos = db.Juegos.ToList(); 
@@ -63,8 +64,27 @@ namespace Proyecto_Final.Controllers
         {
             return View();
         }
-
-
+        [HttpGet]
+        public IActionResult EditarUsuario(int id)
+        {
+            return View();
+        }
+        public ActionResult AgregarUsuario()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AgregarUsuario(Models.Usuario usuario)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Usuarios.Add(usuario);
+                db.SaveChanges();
+                return RedirectToAction("GestionarUsuarios"); // Redirige a la lista de usuarios después de agregar
+            }
+            return View(usuario);
+        }
         public IActionResult GestionarUsuarios()
         {
            
@@ -85,9 +105,18 @@ namespace Proyecto_Final.Controllers
             return RedirectToAction("GestionarUsuarios");
         }
 
-
-        
-
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Actualizar(Models.Usuario usuario)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Update(usuario);
+                db.SaveChanges();
+                return RedirectToAction("GestionarUsuarios"); // Redirige a la lista de usuarios
+            }
+            return View(usuario); // Si hay errores, vuelve a mostrar el formulario
+        }
 
 
 
@@ -105,6 +134,45 @@ namespace Proyecto_Final.Controllers
                 iTextSharp.text.pdf.PdfWriter.GetInstance(document, stream).CloseStream = false;
                 document.Open();
 
+                // Agregar el logo
+                try
+                {
+                    string logoPath = juego.ImagenUrl; // Aquí debe estar tu URL o ruta
+
+                    // Depuración: Mostrar la ruta
+                    Console.WriteLine($"Ruta del logo: {logoPath}");
+
+                    // Convertir la ruta `~` a una ruta absoluta
+                    if (logoPath.StartsWith("~/"))
+                    {
+                        logoPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", logoPath.Substring(2));
+                    }
+
+                    // Verificar que el archivo existe antes de intentar cargarlo
+                    if (!System.IO.File.Exists(logoPath))
+                    {
+                        throw new System.IO.FileNotFoundException("El archivo de imagen no se encontró en la ruta especificada.");
+                    }
+
+                    var logo = iTextSharp.text.Image.GetInstance(logoPath);
+                    logo.ScaleToFit(140f, 120f); // Escalar la imagen a un tamaño adecuado
+                    logo.Alignment = iTextSharp.text.Image.ALIGN_CENTER;
+                    document.Add(logo);
+                }
+                catch (System.IO.FileNotFoundException ex)
+                {
+                    document.Add(new Paragraph("La imagen no se pudo encontrar: " + ex.Message));
+                }
+                catch (System.UriFormatException ex)
+                {
+                    document.Add(new Paragraph("La URL de la imagen es inválida: " + ex.Message));
+                }
+                catch (Exception ex)
+                {
+                    document.Add(new Paragraph("Error al cargar la imagen: " + ex.Message));
+                }
+
+                // Agregar los detalles del juego
                 document.Add(new Paragraph("Detalle del Producto"));
                 document.Add(new Paragraph($"Nombre: {juego.Nombre}"));
                 document.Add(new Paragraph($"Descripción: {juego.Descripcion}"));
@@ -117,6 +185,13 @@ namespace Proyecto_Final.Controllers
                 return File(stream.ToArray(), "application/pdf", $"{juego.Nombre}_detalle.pdf");
             }
         }
+
+
+
+
+
+
+
 
         public IActionResult DownloadAllUsersPdf()
         {
@@ -295,10 +370,51 @@ namespace Proyecto_Final.Controllers
         }
 
 
+        [HttpGet]
+        public IActionResult Editar(int id)
+        {
+            var juego = db.Juegos.Find(id);
+            if (juego == null)
+            {
+                return NotFound();
+            }
+            return View(juego);
+        }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Editar(int id, [Bind("IdJuegos,Nombre,Descripcion,ImagenUrl")] Models.Juego juego, IFormFile nuevoLogo)
+        {
+            if (id != juego.IdJuegos)
+            {
+                return NotFound();
+            }
 
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    if (nuevoLogo != null)
+                    {
+                        var logoPath = Path.Combine("wwwroot/images", nuevoLogo.FileName);
+                        using (var stream = new FileStream(logoPath, FileMode.Create))
+                        {
+                            nuevoLogo.CopyTo(stream);
+                        }
+                        juego.ImagenUrl = "/images/" + nuevoLogo.FileName;
+                    }
 
-
+                    db.Update(juego);
+                    db.SaveChanges();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateException)
+                {
+                    ModelState.AddModelError("", "No se pudo actualizar el juego. Inténtalo nuevamente.");
+                }
+            }
+            return View(juego);
+        }
 
 
 

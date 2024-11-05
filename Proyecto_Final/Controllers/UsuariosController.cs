@@ -2,6 +2,7 @@
 using OfficeOpenXml;
 using Proyecto_Final.Models;
 using Proyecto_Final.Data;
+using System.Linq;
 
 namespace Proyecto_Final.Controllers
 {
@@ -66,6 +67,42 @@ namespace Proyecto_Final.Controllers
                 _context.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AgregarUsuario(Usuario usuario)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Usuarios.Add(usuario);
+                db.SaveChanges();
+                return RedirectToAction("Index"); // Redirige a la lista de usuarios después de agregar
+            }
+            return View(usuario);
+        }
+
+        [HttpGet]
+        public IActionResult EditarUsuario(int id)
+        {
+            var usuario = _context.Usuarios.Find(id);
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+            return View(usuario);
+        }
+
+        [HttpPost]
+        public IActionResult Actualizar(Usuario usuario)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Update(usuario);
+                db.SaveChanges();
+                return RedirectToAction("Index"); 
+            }
+            return View(usuario); 
         }
     }
 }

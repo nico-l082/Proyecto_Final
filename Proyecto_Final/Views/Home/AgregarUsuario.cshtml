@@ -1,0 +1,30 @@
+﻿@model Proyecto_Final.Models.Usuario
+
+@{
+    ViewBag.Title = "Agregar Usuario";
+}
+
+<h2>Agregar Usuario</h2>
+
+@using (Html.BeginForm("AgregarUsuario", "Home", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.NombreUsuario, "Nombre")
+        @Html.TextBoxFor(m => m.NombreUsuario, new { @class = "form-control", placeholder = "Ingresa el nombre del usuario" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Email, "Email")
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Ingresa el email del usuario" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Contraseña, "Contraseña")
+        @Html.PasswordFor(m => m.Contraseña, new { @class = "form-control", placeholder = "Ingresa la contraseña" })
+    </div>
+
+    <button type="submit" class="btn btn-success">Agregar Usuario</button>
+    <a href="@Url.Action("Index", "Home")" class="btn btn-secondary">Cancelar</a>
+}

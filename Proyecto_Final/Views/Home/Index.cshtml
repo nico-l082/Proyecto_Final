@@ -10,20 +10,27 @@
 <div class="juegos-grid">
     @foreach (var juego in Model)
     {
-        <div class="juego-card" style="margin-bottom:0%">
+        <div class="juego-card">
             <img src="@Url.Content(juego.ImagenUrl)" alt="Imagen de @juego.Nombre" class="juego-imagen" />
             <h2 class="juego-nombre">@juego.Nombre</h2>
             <p class="juego-descripcion">@juego.Descripcion</p>
             <p><strong>Género:</strong> @juego.Genero</p>
             <p><strong>Precio:</strong> Usdt$@juego.Precio</p>
             <p><strong>Desarrolladora:</strong> @juego.Desarrolladora</p>
-            <div style="margin-top: 5rem; text-align: center;">
-                <a href="@Url.Action("BuyNow", "Home", new { id = juego.IdJuegos })">
-                    <span class="btn-comprar">Comprar</span>
-                </a>
-            </div>
-            
-            
+            @if (Context.Session.GetString("rol") == "Admin")
+            {
+                <div class="botones-container">
+                    <a href="@Url.Action("BuyNow", "Home", new { id = juego.IdJuegos })" class="btn-comprar">Comprar</a>
+                    <a href="@Url.Action("Editar", "Home", new { id = juego.IdJuegos })" class="btn-comprar">Editar</a>
+                </div>
+
+            }
+            else if (Context.Session.GetString("rol") == "Usuario")
+            {
+                <div class="botones-container">
+                    <a href="@Url.Action("BuyNow", "Home", new { id = juego.IdJuegos })" class="btn-comprar">Comprar</a>
+                </div>
+            }
         </div>
     }
 </div>
@@ -31,9 +38,10 @@
 <style>
     .juegos-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
         gap: 20px;
         margin-top: 20px;
+        justify-items: center; /* Centra las tarjetas en el grid */
     }
 
     .juego-card {
@@ -42,12 +50,17 @@
         padding: 16px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         background-color: #f3fb8a;
+        text-align: center; /* Centra el contenido del card */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%; /* Asegura que las tarjetas sean del mismo tamaño */
     }
 
     .juego-imagen {
-        width: 100%; 
-        height: 200px; 
-        object-fit: cover; 
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
         border-radius: 8px;
         margin-bottom: 10px;
     }
@@ -76,11 +89,18 @@
         border: none;
         border-radius: 5px;
         cursor: pointer;
-        margin-top: 10px;
+        text-decoration: none; /* Elimina el subrayado */
+        transition: background-color 0.3s ease;
     }
 
-    .btn-comprar:hover {
-        background-color: #45a049;
-    }
+        .btn-comprar:hover {
+            background-color: #45a049;
+        }
 
+    .botones-container {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: auto; /* Empuja el contenedor hacia abajo */
+    }
 </style>
