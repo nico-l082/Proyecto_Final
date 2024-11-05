@@ -15,7 +15,7 @@
         </tr>
     </thead>
     <tbody>
-        @if (Model != null && Model.Any()) // Verifica si Model no es null y tiene elementos
+        @if (Model != null && Model.Any())
         {
             foreach (var usuario in Model)
             {
@@ -27,18 +27,19 @@
                             <input type="hidden" name="id" value="@usuario.IdUsuarios" />
                             <button type="submit" class="btn btn-danger" onclick="return confirm('¿Está seguro de que desea eliminar a este usuario?');">Eliminar</button>
                         </form>
+
+                        <button class ="btn btn-warning" style="display:inline;" onclick="location.href='@Url.Action("EditarUsuario", "Home")'">Editar</button>
                     </td>
-                    <td>
-                        <form asp-action="DownloadProductPdf2" method="post" style="display:inline;">
-                            <input type="hidden" name="id" value="@usuario.IdUsuarios" />
-                            <button type="submit" class="btn btn-primary">Descargar PDF</button>
-                        </form>
-                    </td>
-                </tr>                
+                    
+                </tr>
             }
-            
-        }
-        else
+            <tr>
+                <td>
+                    <button class="btn btn-primary" onclick="location.href='@Url.Action("AgregarUsuario", "Home")'">Agregar Usuario</button>
+
+                </td>
+            </tr>
+        }else
         {
             <tr>
                 <td colspan="3">No hay usuarios disponibles.</td>
@@ -46,5 +47,9 @@
         }
     </tbody>
 </table>
-<a asp-action="DownloadAllUsersPdf" asp-controller="Home" class="btn btn-primary">Descargar lista de usuarios en PDF</a>
-<a href="@Url.Action("DownloadAllUsersExcel", "Usuarios")" class="btn btn-primary">Descargar lista de usuarios en Excel</a>
+<div class="mb-3">
+    <a asp-action="DownloadAllUsersPdf" asp-controller="Home" class="btn btn-primary">Descargar lista de usuarios en PDF</a>
+    <a href="@Url.Action("DownloadAllUsersExcel", "Usuarios")" class="btn btn-primary">Descargar lista de usuarios en Excel</a>
+</div>
+
+

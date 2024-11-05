@@ -1,0 +1,27 @@
+﻿@model Proyecto_Final.Models.Usuario
+
+<h2>Editar Usuario</h2>
+
+<form asp-action="Actualizar" method="post">
+    <input type="hidden" asp-for="IdUsuarios" />
+
+    <div class="form-group">
+        <label asp-for="NombreUsuario"></label>
+        <input asp-for="NombreUsuario" class="form-control" />
+        <span asp-validation-for="NombreUsuario" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Contraseña"></label>
+        <input asp-for="Contraseña" type="password" class="form-control" />
+        <span asp-validation-for="Contraseña" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Actualizar</button>
+</form>

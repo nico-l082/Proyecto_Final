@@ -8,7 +8,7 @@ namespace Proyecto_Final.Models.Clases;
 
 public partial class Usuario
 {
-    
+    [Key]
     public int IdUsuarios { get; set; }
 
     [Display (Name = "Nombre de usuario")]

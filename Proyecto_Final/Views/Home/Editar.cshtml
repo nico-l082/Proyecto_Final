@@ -1,0 +1,29 @@
+﻿@model Proyecto_Final.Models.Juego
+
+@{
+    ViewData["Title"] = "Editar Juego";
+}
+
+<h2>Editar Juego</h2>
+
+<form asp-action="Editar" asp-controller="Home" asp-route-id="@Model.IdJuegos" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="Nombre" class="control-label"></label>
+        <input asp-for="Nombre" class="form-control" readonly />
+    </div>
+    <div class="form-group">
+        <label asp-for="Descripcion" class="control-label"></label>
+        <textarea asp-for="Descripcion" class="form-control"></textarea>
+    </div>
+    <div class="form-group">
+        <label asp-for="ImagenUrl" class="control-label">Logo Actual</label><br>
+        <img src="@Url.Content(Model.ImagenUrl)" alt="Logo del Juego" style="width:150px; height:auto; margin-top:10px;" />
+    </div>
+    <div class="form-group">
+        <label for="nuevoLogo" class="control-label">Cambiar Logo</label>
+        <input type="file" name="nuevoLogo" class="form-control-file" />
+    </div>
+    <input class="btn btn-secondary" type="submit" value="Guardar cambios" />
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>
+

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Proyecto_Final.Models;
 
 public partial class Juego
 {
+    [Key]
     public int IdJuegos { get; set; }
 
     public string Nombre { get; set; }

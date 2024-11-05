@@ -22,15 +22,16 @@
 <form asp-action="ConfirmPurchase" method="post" class="carrito-formulario">
     <input type="hidden" name="JuegoId" value="@Model.IdJuegos" /> 
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div style="display: grid;grid-template-columns: 1fr 1fr;gap: 20px;">
+        <div class="form-group">
+            <label class="control-label">Nombre</label>
+            <input type="text" name="Nombre" class="form-control" required />
+        </div>
 
-    <div class="form-group">
-        <label class="control-label">Nombre</label>
-        <input type="text" name="Nombre" class="form-control" required />
-    </div>
-
-    <div class="form-group">
-        <label class="control-label">Apellido</label>
-        <input type="text" name="Apellido" class="form-control" required />
+        <div class="form-group">
+            <label class="control-label">Apellido</label>
+            <input type="text" name="Apellido" class="form-control" required />
+        </div>
     </div>
 
     <div class="form-group">
@@ -43,17 +44,22 @@
         <input type="text" name="NumeroTarjeta" class="form-control" required />
     </div>
 
-    <div class="form-group">
-        <label class="control-label">Vencimiento</label>
-        <input type="text" name="Vencimiento" class="form-control" required />
-    </div>
+    <div style="display: grid;grid-template-columns: 1fr 1fr;gap: 20px;">
+        <div class="form-group">
+            <label class="control-label">Vencimiento</label>
+            <input type="text" name="Vencimiento" class="form-control" required />
+        </div>
 
-    <div class="form-group">
-        <label class="control-label">Código</label>
-        <input type="text" name="Codigo" class="form-control" required />
+        <div class="form-group">
+            <label class="control-label">Código</label>
+            <input type="text" name="Codigo" class="form-control" required />
+        </div>
     </div>
-
-    <button type="submit" class="btn btn-primary">Continuar</button> 
+    
+    <div style="text-align:center">
+        <button type="submit" class="btn btn-primary">Continuar</button>
+    </div>
+    
 </form>
 
 
