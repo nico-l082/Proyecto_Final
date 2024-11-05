@@ -112,6 +112,7 @@ CREATE TABLE [dbo].[Juegos](
 	[itiPlus] [int] NULL,
 	[precio] [money] NULL,
 	[desarrolladora] [varchar](100) NULL,
+	[codJuego][varchar](50) NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[idJuegos] ASC
@@ -219,3 +220,5 @@ USE [master]
 GO
 ALTER DATABASE [Proyecto_Final] SET  READ_WRITE 
 GO
+ALTER TABLE [dbo].[Juegos] WITH CHECK ADD CONSTRAINT [jUE_biblio_fk] FOREIGN KEY ([codJuego])
+REFERENCES [dbo].[juegos] ([idJuegos])
