@@ -5,16 +5,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Proyecto_Final.Models;
 
-public partial class UsuarioJuego
+public partial class UsuariosJuego
 {
     [Key]
-    public int Id { get; set; }
+    public int IdUj { get; set; }
     [ForeignKey("Usuario")]
-    public int UserId { get; set; }
+    public int? UserId { get; set; }
     [ForeignKey("Juego")]
-    public int JuegoId { get; set; }
+    public int? JuegoId { get; set; }
 
-    public DateTime FechaCompra { get; set; }
+    public DateTime? FechaCompra { get; set; }
 
     public virtual Juego Juego { get; set; }
 

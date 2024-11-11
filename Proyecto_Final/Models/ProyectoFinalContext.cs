@@ -29,9 +29,10 @@ public partial class ProyectoFinalContext : DbContext
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
-    public virtual DbSet<UsuarioJuego> UsuarioJuegos { get; set; }
+    public virtual DbSet<UsuariosJuego> UsuariosJuegos { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=Nico_Desktop;Initial Catalog=Proyecto_Final;User ID=sa;Password=Malg123;Encrypt=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -203,25 +204,24 @@ public partial class ProyectoFinalContext : DbContext
                 .HasConstraintName("Usu_Memb_fk");
         });
 
-        modelBuilder.Entity<UsuarioJuego>(entity =>
+        modelBuilder.Entity<UsuariosJuego>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__UsuarioJ__3214EC0788401D52");
+            entity.HasKey(e => e.IdUj).HasName("PK__Usuarios__9DB8000BCA3B98AE");
 
-            entity.ToTable("UsuarioJuego");
-
+            entity.Property(e => e.IdUj).HasColumnName("idUJ");
             entity.Property(e => e.FechaCompra)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
+                .HasColumnType("datetime")
+                .HasColumnName("fechaCompra");
+            entity.Property(e => e.JuegoId).HasColumnName("juegoId");
+            entity.Property(e => e.UserId).HasColumnName("userId");
 
-            entity.HasOne(d => d.Juego).WithMany(p => p.UsuarioJuegos)
+            entity.HasOne(d => d.Juego).WithMany(p => p.UsuariosJuegos)
                 .HasForeignKey(d => d.JuegoId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_UsuarioJuego_Juego");
+                .HasConstraintName("FK_Juego");
 
-            entity.HasOne(d => d.User).WithMany(p => p.UsuarioJuegos)
+            entity.HasOne(d => d.User).WithMany(p => p.UsuariosJuegos)
                 .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_UsuarioJuego_Usuario");
+                .HasConstraintName("FK_Usuario");
         });
 
         OnModelCreatingPartial(modelBuilder);

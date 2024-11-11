@@ -25,5 +25,5 @@ public partial class Juego
 
     public virtual TipoMembresium ItiPlusNavigation { get; set; }
 
-    public virtual ICollection<UsuarioJuego> UsuarioJuegos { get; set; } = new List<UsuarioJuego>();
+    public virtual ICollection<UsuariosJuego> UsuariosJuegos { get; set; } = new List<UsuariosJuego>();
 }

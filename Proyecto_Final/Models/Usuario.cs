@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Proyecto_Final.Models;
 
 public partial class Usuario
 {
+    [Key]
     public int IdUsuarios { get; set; }
 
     public string NombreUsuario { get; set; }
@@ -23,5 +25,5 @@ public partial class Usuario
 
     public virtual MiembrosPlu MiembroNavigation { get; set; }
 
-    public virtual ICollection<UsuarioJuego> UsuarioJuegos { get; set; } = new List<UsuarioJuego>();
+    public virtual ICollection<UsuariosJuego> UsuariosJuegos { get; set; } = new List<UsuariosJuego>();
 }
