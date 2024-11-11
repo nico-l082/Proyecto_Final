@@ -1,8 +1,20 @@
 ﻿@model Proyecto_Final.Models.Usuario
 
 <h2>Editar Usuario</h2>
+<button class="btn btn-secondary" onclick="window.history.back();">Volver</button>
 
-<form asp-action="Actualizar" method="post">
+@if (Model != null)
+{
+    <div class="alert alert-info">
+        <p><strong>Datos del Usuario Seleccionado:</strong></p>
+        <p><strong>ID:</strong> @Model.IdUsuarios</p>
+        <p><strong>Nombre de Usuario:</strong> @Model.NombreUsuario</p>
+        <p><strong>Email:</strong> @Model.Email</p>
+    </div>
+}
+
+
+<form asp-action="Actualizar" asp-controller="Home" method="post">
     <input type="hidden" asp-for="IdUsuarios" />
 
     <div class="form-group">
@@ -25,3 +37,4 @@
 
     <button type="submit" class="btn btn-primary">Actualizar</button>
 </form>
+

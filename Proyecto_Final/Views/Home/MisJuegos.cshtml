@@ -1,8 +1,18 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model IEnumerable<Proyecto_Final.Models.Juego>
 
+<h2>Mis Juegos</h2>
+<button class="btn btn-secondary" onclick="window.history.back();">Volver</button>
+<hr />
 
-<h1>
-    Hola
-</h1>
+<div class="juegos-grid">
+    @foreach (var juego in Model)
+    {
+        <div class="juego-card">
+            <img src="@Url.Content(juego.ImagenUrl)" alt="Imagen de @juego.Nombre" class="juego-imagen" />
+            <h2 class="juego-nombre">@juego.Nombre</h2>
+            <p class="juego-descripcion">@juego.Descripcion</p>
+            <p><strong>Género:</strong> @juego.Genero</p>
+            <p><strong>Precio:</strong> Usdt$@juego.Precio</p>
+        </div>
+    }
+</div>

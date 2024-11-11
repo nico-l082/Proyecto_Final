@@ -17,23 +17,22 @@
             <p><strong>Género:</strong> @juego.Genero</p>
             <p><strong>Precio:</strong> Usdt$@juego.Precio</p>
             <p><strong>Desarrolladora:</strong> @juego.Desarrolladora</p>
-            @if (Context.Session.GetString("rol") == "Admin")
-            {
-                <div class="botones-container">
-                    <a href="@Url.Action("BuyNow", "Home", new { id = juego.IdJuegos })" class="btn-comprar">Comprar</a>
-                    <a href="@Url.Action("Editar", "Home", new { id = juego.IdJuegos })" class="btn-comprar">Editar</a>
-                </div>
 
-            }
-            else if (Context.Session.GetString("rol") == "Usuario")
+            @if (Context.Session.GetString("rol") == "Admin" || Context.Session.GetString("rol") == "Usuario")
             {
                 <div class="botones-container">
-                    <a href="@Url.Action("BuyNow", "Home", new { id = juego.IdJuegos })" class="btn-comprar">Comprar</a>
+                    <a asp-action="BuyNow" asp-controller="Home" asp-route-id="@juego.IdJuegos" class="btn-comprar">Comprar</a>
                 </div>
             }
+            else
+            {
+                <p>Por favor, inicie sesión para comprar.</p>
+            }
+
         </div>
     }
 </div>
+
 
 <style>
     .juegos-grid {

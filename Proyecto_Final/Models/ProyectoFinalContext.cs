@@ -29,9 +29,10 @@ public partial class ProyectoFinalContext : DbContext
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    public virtual DbSet<UsuarioJuego> UsuarioJuegos { get; set; }
 
-        => optionsBuilder.UseSqlServer("Server=Nico_Desktop;Initial Catalog=Proyecto_Final;User ID=sa;Password=Malg123;Encrypt=True;Trust Server Certificate=True;");
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        => optionsBuilder.UseSqlServer("Server=Nico_Desktop;Initial Catalog=Proyecto_Final;User ID=sa;Password=Malg123;Encrypt=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -62,6 +63,8 @@ public partial class ProyectoFinalContext : DbContext
 
             entity.ToTable("Biblioteca");
 
+            entity.HasIndex(e => e.Juegos, "IX_Biblioteca_juegos");
+
             entity.Property(e => e.IdBiblio).HasColumnName("idBiblio");
             entity.Property(e => e.Juegos).HasColumnName("juegos");
             entity.Property(e => e.Nombre)
@@ -77,6 +80,8 @@ public partial class ProyectoFinalContext : DbContext
         modelBuilder.Entity<Juego>(entity =>
         {
             entity.HasKey(e => e.IdJuegos).HasName("PK__Juegos__E4EEF679CB006B0B");
+
+            entity.HasIndex(e => e.ItiPlus, "IX_Juegos_itiPlus");
 
             entity.Property(e => e.IdJuegos).HasColumnName("idJuegos");
             entity.Property(e => e.Desarrolladora)
@@ -129,6 +134,8 @@ public partial class ProyectoFinalContext : DbContext
         {
             entity.HasKey(e => e.IdMiembros).HasName("PK__Miembros__F1261B7C5B75030D");
 
+            entity.HasIndex(e => e.Tipo, "IX_MiembrosPlus_tipo");
+
             entity.Property(e => e.IdMiembros).HasColumnName("idMiembros");
             entity.Property(e => e.CantidadJuegosMembresia).HasColumnName("cantidadJuegosMembresia");
             entity.Property(e => e.FormaPago)
@@ -152,6 +159,8 @@ public partial class ProyectoFinalContext : DbContext
         {
             entity.HasKey(e => e.IdTipoMembresia).HasName("PK__TipoMemb__1D164B22339793F0");
 
+            entity.HasIndex(e => e.Tipo, "IX_TipoMembresia_tipo");
+
             entity.Property(e => e.IdTipoMembresia).HasColumnName("idTipoMembresia");
             entity.Property(e => e.Tipo).HasColumnName("tipo");
 
@@ -163,6 +172,10 @@ public partial class ProyectoFinalContext : DbContext
         modelBuilder.Entity<Usuario>(entity =>
         {
             entity.HasKey(e => e.IdUsuarios).HasName("PK__Usuarios__3940559A03D1B9BB");
+
+            entity.HasIndex(e => e.BiblioJuegos, "IX_Usuarios_biblioJuegos");
+
+            entity.HasIndex(e => e.Miembro, "IX_Usuarios_miembro");
 
             entity.Property(e => e.IdUsuarios).HasColumnName("idUsuarios");
             entity.Property(e => e.BiblioJuegos).HasColumnName("biblioJuegos");
@@ -188,6 +201,27 @@ public partial class ProyectoFinalContext : DbContext
             entity.HasOne(d => d.MiembroNavigation).WithMany(p => p.Usuarios)
                 .HasForeignKey(d => d.Miembro)
                 .HasConstraintName("Usu_Memb_fk");
+        });
+
+        modelBuilder.Entity<UsuarioJuego>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__UsuarioJ__3214EC0788401D52");
+
+            entity.ToTable("UsuarioJuego");
+
+            entity.Property(e => e.FechaCompra)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+
+            entity.HasOne(d => d.Juego).WithMany(p => p.UsuarioJuegos)
+                .HasForeignKey(d => d.JuegoId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_UsuarioJuego_Juego");
+
+            entity.HasOne(d => d.User).WithMany(p => p.UsuarioJuegos)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_UsuarioJuego_Usuario");
         });
 
         OnModelCreatingPartial(modelBuilder);

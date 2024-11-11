@@ -50,10 +50,8 @@ namespace Proyecto_Final.Controllers
         {
             return View();
         }
-        public IActionResult MisJuegos()
-        {
-            return View();
-        }
+        
+
         
         [HttpGet]
         public ActionResult LogIn()
@@ -61,11 +59,6 @@ namespace Proyecto_Final.Controllers
             return View();
         }
         public ActionResult Admin()
-        {
-            return View();
-        }
-        [HttpGet]
-        public IActionResult EditarUsuario(int id)
         {
             return View();
         }
@@ -81,7 +74,7 @@ namespace Proyecto_Final.Controllers
             {
                 db.Usuarios.Add(usuario);
                 db.SaveChanges();
-                return RedirectToAction("GestionarUsuarios"); // Redirige a la lista de usuarios después de agregar
+                return RedirectToAction("GestionarUsuarios");
             }
             return View(usuario);
         }
@@ -105,19 +98,6 @@ namespace Proyecto_Final.Controllers
             return RedirectToAction("GestionarUsuarios");
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Actualizar(Models.Usuario usuario)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Update(usuario);
-                db.SaveChanges();
-                return RedirectToAction("GestionarUsuarios"); // Redirige a la lista de usuarios
-            }
-            return View(usuario); // Si hay errores, vuelve a mostrar el formulario
-        }
-
 
 
         public IActionResult DownloadProductPdf(int id)
@@ -134,28 +114,24 @@ namespace Proyecto_Final.Controllers
                 iTextSharp.text.pdf.PdfWriter.GetInstance(document, stream).CloseStream = false;
                 document.Open();
 
-                // Agregar el logo
                 try
                 {
-                    string logoPath = juego.ImagenUrl; // Aquí debe estar tu URL o ruta
+                    string logoPath = juego.ImagenUrl; 
 
-                    // Depuración: Mostrar la ruta
                     Console.WriteLine($"Ruta del logo: {logoPath}");
 
-                    // Convertir la ruta `~` a una ruta absoluta
                     if (logoPath.StartsWith("~/"))
                     {
                         logoPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", logoPath.Substring(2));
                     }
 
-                    // Verificar que el archivo existe antes de intentar cargarlo
                     if (!System.IO.File.Exists(logoPath))
                     {
                         throw new System.IO.FileNotFoundException("El archivo de imagen no se encontró en la ruta especificada.");
                     }
 
                     var logo = iTextSharp.text.Image.GetInstance(logoPath);
-                    logo.ScaleToFit(140f, 120f); // Escalar la imagen a un tamaño adecuado
+                    logo.ScaleToFit(140f, 120f); 
                     logo.Alignment = iTextSharp.text.Image.ALIGN_CENTER;
                     document.Add(logo);
                 }
@@ -172,7 +148,6 @@ namespace Proyecto_Final.Controllers
                     document.Add(new Paragraph("Error al cargar la imagen: " + ex.Message));
                 }
 
-                // Agregar los detalles del juego
                 document.Add(new Paragraph("Detalle del Producto"));
                 document.Add(new Paragraph($"Nombre: {juego.Nombre}"));
                 document.Add(new Paragraph($"Descripción: {juego.Descripcion}"));
@@ -326,7 +301,7 @@ namespace Proyecto_Final.Controllers
                 HttpContext.Session.SetString("nombreUsuario", usuario.NombreUsuario);
 
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("LogIn", "Home");
             }
         }
 
@@ -341,87 +316,163 @@ namespace Proyecto_Final.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-
-        public IActionResult Cs2()
-        {
-            return View("Pestaña_Juegos/cs2");
-        }
-        public IActionResult BuyNow(int id) 
-        {
-            var juego = db.Juegos.Find(id);
-            if (juego == null)
-            {
-                return NotFound();
-            }
-            return View(juego);
-        }
-
-     
         [HttpPost]
-        public IActionResult BuyNow() 
+        public IActionResult BuyNow(int id)
         {
-            if (ModelState.IsValid)
+            string userIdString = HttpContext.Session.GetString("IdUsuarios");
+            int userId = int.Parse(userIdString); 
+
+            var compraExistente = db.UsuarioJuegos
+                .FirstOrDefault(uj => uj.UserId == userId && uj.JuegoId == id);
+
+            if (compraExistente == null)
             {
-                
-                return RedirectToAction("Success"); 
-            }
-
-            return View(); 
-        }
-
-
-        [HttpGet]
-        public IActionResult Editar(int id)
-        {
-            var juego = db.Juegos.Find(id);
-            if (juego == null)
-            {
-                return NotFound();
-            }
-            return View(juego);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Editar(int id, [Bind("IdJuegos,Nombre,Descripcion,ImagenUrl")] Models.Juego juego, IFormFile nuevoLogo)
-        {
-            if (id != juego.IdJuegos)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                var nuevaCompra = new UsuarioJuego
                 {
-                    if (nuevoLogo != null)
-                    {
-                        var logoPath = Path.Combine("wwwroot/images", nuevoLogo.FileName);
-                        using (var stream = new FileStream(logoPath, FileMode.Create))
-                        {
-                            nuevoLogo.CopyTo(stream);
-                        }
-                        juego.ImagenUrl = "/images/" + nuevoLogo.FileName;
-                    }
+                    UserId = userId,
+                    JuegoId = id,
+                    FechaCompra = DateTime.Now
+                };
 
-                    db.Update(juego);
+                db.UsuarioJuegos.Add(nuevaCompra);
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("MisJuegos");
+        }
+
+
+
+
+
+
+
+        [HttpPost]
+        public IActionResult Actualizar(Models.Usuario usuario)
+        {
+            if (usuario.IdUsuarios == 0) 
+            {
+                return View("Error", new ErrorViewModel { ErrorMessage = "ID de usuario inválido." });
+            }
+
+            var usuarioExistente = db.Usuarios.FirstOrDefault(u => u.IdUsuarios == usuario.IdUsuarios);
+            if (usuarioExistente != null)
+            {
+                usuarioExistente.NombreUsuario = usuario.NombreUsuario;
+                usuarioExistente.Email = usuario.Email;
+                usuarioExistente.Contraseña = usuario.Contraseña;
+
+                db.SaveChanges();
+                return RedirectToAction("GestionarUsuarios", "Home");
+            }
+
+            return View("Error", new ErrorViewModel { ErrorMessage = "Usuario no encontrado." });
+        }
+
+        public IActionResult EditarUsuario(int id)
+        {
+            var usuario = db.Usuarios.FirstOrDefault(u => u.IdUsuarios == id);
+            if (usuario == null)
+            {
+                return View("Error", new ErrorViewModel { ErrorMessage = "Usuario no encontrado." });
+            }
+
+            return View(usuario);
+        }
+
+
+        public IActionResult GestionarJuegos()
+        {
+            var juegos = db.Juegos.ToList();
+
+            return View(juegos);
+        }
+
+        public IActionResult EditarJuego(int id)
+        {
+            var juego = db.Juegos.FirstOrDefault(j => j.IdJuegos == id);
+
+            if (juego == null)
+            {
+                return View("Error", new ErrorViewModel { ErrorMessage = "Juego no encontrado." });
+            }
+
+            return View(juego);
+        }
+
+        [HttpPost]
+        public IActionResult EditarJuego(Proyecto_Final.Models.Juego juego)
+        {
+            if (ModelState.IsValid)
+            {
+                var juegoExistente = db.Juegos.FirstOrDefault(j => j.IdJuegos == juego.IdJuegos);
+
+                if (juegoExistente != null)
+                {
+                    juegoExistente.Nombre = juego.Nombre;
+                    juegoExistente.Descripcion = juego.Descripcion;
+                    juegoExistente.Genero = juego.Genero;
+                    juegoExistente.Precio = juego.Precio;
+
                     db.SaveChanges();
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (DbUpdateException)
-                {
-                    ModelState.AddModelError("", "No se pudo actualizar el juego. Inténtalo nuevamente.");
+
+                    return RedirectToAction("GestionarJuegos");
                 }
             }
+
             return View(juego);
+        }
+        public IActionResult EliminarJuego(int id)
+        {
+            var juego = db.Juegos.FirstOrDefault(j => j.IdJuegos == id);
+
+            if (juego != null)
+            {
+                db.Juegos.Remove(juego);
+                db.SaveChanges();
+
+                return RedirectToAction("GestionarJuegos");
+            }
+
+            return View("Error", new ErrorViewModel { ErrorMessage = "Juego no encontrado." });
+        }
+
+        public IActionResult AgregarJuego()
+        {
+            return View();
         }
 
 
+        [HttpPost]
+        public IActionResult AgregarJuegos(Models.Juego juego)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Juegos.Add(juego);
+                db.SaveChanges();
+                
+                return RedirectToAction("GestionarJuegos");
+            }
 
+            return View(juego);
+        }
+        public IActionResult MisJuegos()
+        {
+            string userIdString = HttpContext.Session.GetString("UserId");
 
+            if (string.IsNullOrEmpty(userIdString))
+            {
+                return RedirectToAction("Login", "Home");
+            }
 
+            int userId = int.Parse(userIdString);
 
+            var juegosComprados = db.UsuarioJuegos
+                .Where(uj => uj.UserId == userId)
+                .Select(uj => uj.Juego)
+                .ToList();
 
-
+            return View(juegosComprados);
+        }
     }
 }
