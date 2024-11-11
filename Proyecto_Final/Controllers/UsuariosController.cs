@@ -93,16 +93,6 @@ namespace Proyecto_Final.Controllers
             return View(usuario);
         }
 
-        [HttpPost]
-        public IActionResult Actualizar(Usuario usuario)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Update(usuario);
-                db.SaveChanges();
-                return RedirectToAction("Index"); 
-            }
-            return View(usuario); 
-        }
+        
     }
 }

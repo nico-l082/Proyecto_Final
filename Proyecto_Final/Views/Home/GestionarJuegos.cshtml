@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Proyecto_Final.Models.Juego>
+
+<h2>Gestionar Juegos</h2>
+
+<button class="btn btn-secondary" onclick="window.history.back();">Volver</button>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Imagen</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Categoría</th>
+            <th>Precio</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <a asp-action="AgregarJuego" asp-controller="Home" class="btn btn-primary">Agregar Juegos</a>
+            </td>
+        </tr>
+
+        @foreach (var juego in Model)
+        {
+            <tr>
+                <td>
+                    <img src="@juego.ImagenUrl" alt="@juego.Nombre" style="width: 100px; height: auto;" />
+                </td>
+                <td>@juego.Nombre</td>
+                <td>@juego.Descripcion</td>
+                <td>@juego.Genero</td>
+                <td>@juego.Precio</td>
+                <td>
+                    <a asp-action="EditarJuego" asp-route-id="@juego.IdJuegos" class="btn btn-primary btn-sm">Editar</a>
+                    <a asp-action="EliminarJuego" asp-route-id="@juego.IdJuegos" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar este juego?');">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

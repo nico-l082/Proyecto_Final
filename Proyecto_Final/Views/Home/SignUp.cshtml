@@ -5,9 +5,10 @@
 }
 <div>
     <h1>SignUp</h1>
+    <button class="btn btn-secondary" onclick="window.history.back();">Volver</button>
 
-    <h4>Usuario</h4>
     <hr />
+
     <form asp-action="SignUp" class="sign-up-formulario">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">

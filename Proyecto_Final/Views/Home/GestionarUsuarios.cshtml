@@ -5,6 +5,7 @@
 }
 
 <h1>Lista de Usuarios</h1>
+<button class="btn btn-secondary" onclick="window.history.back();">Volver</button>
 
 <table class="table table-striped">
     <thead>
@@ -28,7 +29,8 @@
                             <button type="submit" class="btn btn-danger" onclick="return confirm('¿Está seguro de que desea eliminar a este usuario?');">Eliminar</button>
                         </form>
 
-                        <button class ="btn btn-warning" style="display:inline;" onclick="location.href='@Url.Action("EditarUsuario", "Home")'">Editar</button>
+                        <a class ="btn btn-warning" style="display:inline;" asp-action="EditarUsuario" asp-controller="Home" asp-route-id="@usuario.IdUsuarios">Editar</a>
+
                     </td>
                     
                 </tr>

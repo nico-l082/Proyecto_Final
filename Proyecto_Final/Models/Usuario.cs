@@ -24,4 +24,6 @@ public partial class Usuario
     public virtual Biblioteca BiblioJuegosNavigation { get; set; }
 
     public virtual MiembrosPlu MiembroNavigation { get; set; }
+
+    public virtual ICollection<UsuariosJuego> UsuariosJuegos { get; set; } = new List<UsuariosJuego>();
 }

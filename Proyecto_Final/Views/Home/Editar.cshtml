@@ -5,6 +5,7 @@
 }
 
 <h2>Editar Juego</h2>
+<button class="btn btn-secondary" onclick="window.history.back();">Volver</button>
 
 <form asp-action="Editar" asp-controller="Home" asp-route-id="@Model.IdJuegos" method="post" enctype="multipart/form-data">
     <div class="form-group">
