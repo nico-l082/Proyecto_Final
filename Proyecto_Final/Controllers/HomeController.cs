@@ -316,55 +316,37 @@ namespace Proyecto_Final.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        [HttpPost]
         public IActionResult BuyNow(int id)
         {
-            string userIdString = HttpContext.Session.GetString("IdUsuario") ?? HttpContext.Session.GetString("IdAdmin");
+            
+            var juego = db.Juegos.SingleOrDefault(j => j.IdJuegos == id);
 
-           
-            int userId;
-            if (!int.TryParse(userIdString, out userId))
+            if (juego == null)
             {
-                return BadRequest("ID de usuario no válido.");
+                return NotFound("El juego no fue encontrado.");
             }
 
-            var compraExistente = db.UsuariosJuegos
-                .FirstOrDefault(uj => uj.UserId == userId && uj.JuegoId == id);
-
-            if (compraExistente == null)
-            {
-                var nuevaCompra = new UsuariosJuego
-                {
-                    UserId = userId,
-                    JuegoId = id,
-                    FechaCompra = DateTime.Now
-                };
-
-                db.UsuariosJuegos.Add(nuevaCompra);
-                db.SaveChanges();
-            }
-
-            return RedirectToAction("MisJuegos");
+            
+            return View(juego);
         }
 
         public IActionResult MisJuegos()
         {
-            string userIdString = HttpContext.Session.GetString("IdUsuario") ?? HttpContext.Session.GetString("IdAdmin");
+            var userIdString = HttpContext.Session.GetString("IdUsuario") ?? HttpContext.Session.GetString("IdAdmin");
 
-           
-            int userId;
-            if (!int.TryParse(userIdString, out userId))
+            if (!int.TryParse(userIdString, out int userId))
             {
                 return BadRequest("ID de usuario no válido.");
             }
 
             var juegosComprados = db.UsuariosJuegos
                 .Where(uj => uj.UserId == userId)
-                .Select(uj => uj.Juego)
+                .Select(uj => uj.Juego) 
                 .ToList();
 
             return View(juegosComprados);
         }
+
 
 
 
